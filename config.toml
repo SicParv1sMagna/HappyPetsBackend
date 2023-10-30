@@ -1,0 +1,2 @@
+ServiceHost = "127.0.0.1" # просто ключ значение
+ServicePort = 8000
