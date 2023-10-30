@@ -1,2 +1,2 @@
-ServiceHost = "127.0.0.1" # просто ключ значение
+ServiceHost = "127.0.0.1"
 ServicePort = 8000
