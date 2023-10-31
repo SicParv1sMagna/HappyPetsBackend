@@ -1,0 +1,40 @@
+definitions:
+  model.User:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
+      password:
+        type: string
+      repeat_password:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /api/user/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user with the provided information
+      parameters:
+      - description: User object in JSON format
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully registered user
+          schema:
+            $ref: '#/definitions/model.User'
+      summary: Register a new user
+swagger: "2.0"
