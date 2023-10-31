@@ -20,6 +20,14 @@ func (a *Application) StartServer() {
 		AllowCredentials: true, // Enable credentials (e.g., cookies)
 	}))
 
+	api := router.Group("/api")
+	{
+		user := api.Group("/user")
+		{
+			user.POST("/register", a.handler.Register)
+		}
+	}
+
 	err := router.Run()
 	if err != nil {
 		log.Println("Error with running\nServer down")
