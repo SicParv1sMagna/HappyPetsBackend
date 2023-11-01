@@ -15,6 +15,121 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/image/remove/{userID}/{petID}": {
+            "delete": {
+                "description": "Removes an image for a specific pet associated with a user.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Image"
+                ],
+                "summary": "Removes an image for a specific pet associated with a user.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "userID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Pet ID",
+                        "name": "petID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Image removed successfully",
+                        "schema": {
+                            "$ref": "#/definitions/model.RemoveImageResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request, invalid input data",
+                        "schema": {
+                            "$ref": "#/definitions/model.RemoveImageResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Image not found",
+                        "schema": {
+                            "$ref": "#/definitions/model.RemoveImageResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/model.RemoveImageResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/image/upload/{userID}/{petID}": {
+            "post": {
+                "description": "Uploads an image for a specific pet associated with a user.",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Image"
+                ],
+                "summary": "Uploads an image for a specific pet associated with a user.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "userID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Pet ID",
+                        "name": "petID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Image file",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Image uploaded successfully",
+                        "schema": {
+                            "$ref": "#/definitions/model.UploadImageResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request, invalid input data",
+                        "schema": {
+                            "$ref": "#/definitions/model.UploadImageResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/model.UploadImageResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/user/register": {
             "post": {
                 "description": "Register a new user with the provided information",
@@ -48,6 +163,20 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "model.RemoveImageResponse": {
+            "type": "object"
+        },
+        "model.UploadImageResponse": {
+            "type": "object",
+            "properties": {
+                "imageURL": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
         "model.User": {
             "type": "object",
             "properties": {

@@ -1,4 +1,13 @@
 definitions:
+  model.RemoveImageResponse:
+    type: object
+  model.UploadImageResponse:
+    properties:
+      imageURL:
+        type: string
+      message:
+        type: string
+    type: object
   model.User:
     properties:
       email:
@@ -17,6 +26,83 @@ definitions:
 info:
   contact: {}
 paths:
+  /api/image/remove/{userID}/{petID}:
+    delete:
+      consumes:
+      - application/json
+      description: Removes an image for a specific pet associated with a user.
+      parameters:
+      - description: User ID
+        in: path
+        name: userID
+        required: true
+        type: string
+      - description: Pet ID
+        in: path
+        name: petID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Image removed successfully
+          schema:
+            $ref: '#/definitions/model.RemoveImageResponse'
+        "400":
+          description: Bad request, invalid input data
+          schema:
+            $ref: '#/definitions/model.RemoveImageResponse'
+        "404":
+          description: Image not found
+          schema:
+            $ref: '#/definitions/model.RemoveImageResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/model.RemoveImageResponse'
+      summary: Removes an image for a specific pet associated with a user.
+      tags:
+      - Image
+  /api/image/upload/{userID}/{petID}:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Uploads an image for a specific pet associated with a user.
+      parameters:
+      - description: User ID
+        in: path
+        name: userID
+        required: true
+        type: string
+      - description: Pet ID
+        in: path
+        name: petID
+        required: true
+        type: string
+      - description: Image file
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Image uploaded successfully
+          schema:
+            $ref: '#/definitions/model.UploadImageResponse'
+        "400":
+          description: Bad request, invalid input data
+          schema:
+            $ref: '#/definitions/model.UploadImageResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/model.UploadImageResponse'
+      summary: Uploads an image for a specific pet associated with a user.
+      tags:
+      - Image
   /api/user/register:
     post:
       consumes:

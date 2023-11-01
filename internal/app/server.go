@@ -34,6 +34,11 @@ func (a *Application) StartServer() {
 		{
 			user.POST("/register", a.handler.Register)
 		}
+		image := api.Group("/image")//Работа с изображениями минио хранилища
+		{
+			image.POST("/upload/:userID/:petID", a.handler.UploadImage) // Метод для загрузки изображения
+			image.DELETE("/remove/:userID/:petID", a.handler.RemoveImage) // Метод для удаления изображения
+		}
 	}
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  db:
+    image: postgres:15
+    volumes:
+      - type: volume
+        source: postgresdb-data
+        target: /var/lib/postgresql/data
+    ports:
+      - "5449:5432"
+    environment:
+      POSTGRES_USER: roor
+      POSTGRES_DB: HappyPetsBackend
+      POSTGRES_PASSWORD: root
+  minio:
+    container_name: HappyPetsMinio
+    image: minio/minio:latest
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ACCESS_KEY: HappyPetsAccessKey
+      MINIO_SECRET_KEY: HappyPetsSecretKey
+      MINIO_CONSOLE_ADDRESS: ":9001"
+    volumes:
+      - minio-data:/data
+    command: server /data
+volumes:
+  postgresdb-data:
+    driver: local
+  minio-data:
+    driver: local
