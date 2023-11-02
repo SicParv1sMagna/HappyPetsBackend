@@ -13,7 +13,7 @@ type PetRepository interface {
 	UpdatePet(pet model.Pet) error
 }
 
-func (r*Repository) CreatePet(pet model.Pet) error{
+func (r *Repository) CreatePet(pet model.Pet) error {
 	if err := r.db.Create(&pet).Error; err != nil {
 		return errors.New("ошибка при создании питомца и добавлении его в БД")
 	}

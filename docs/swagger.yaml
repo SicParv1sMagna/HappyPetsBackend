@@ -300,7 +300,7 @@ paths:
           description: Успешно зарегистрированный пользователь
           schema:
             $ref: '#/definitions/model.User'
-      summary: Регистрация нового пользователя.
+      summary: Register a new user
       tags:
-      - Пользователь
+      - User
 swagger: "2.0"

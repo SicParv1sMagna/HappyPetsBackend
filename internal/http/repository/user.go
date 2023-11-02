@@ -10,7 +10,7 @@ type UserRepository interface {
 	GetByPhoneNumber(phoneNumber string) (model.User, error)
 }
 
-func (r *Repository) Create(user model.User) error {
+func (r *Repository) CreateUser(user model.User) error {
 	err := r.db.Table("User").Create(&user).Error
 	return err
 }

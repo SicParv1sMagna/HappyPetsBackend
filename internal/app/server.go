@@ -20,6 +20,12 @@ func (a *Application) StartServer() {
 
 	// Создаем роутинг
 	router := gin.Default()
+	// Обработчик OPTIONS запросов
+	router.OPTIONS("/*path", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "options",
+		})
+	})
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"}, // List of allowed origins
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
@@ -47,8 +53,8 @@ func (a *Application) StartServer() {
 				image.POST("/upload/:userID/:petID", a.handler.UploadImage)   // Метод для загрузки изображения
 				image.DELETE("/remove/:userID/:petID", a.handler.RemoveImage) // Метод для удаления изображения
 			}
-			pet.POST("/create", a.handler.CreatePet)//Метод для создания питомца
-			pet.PUT("/update", a.handler.UpdatePet)//Метод для изменения информации питомца
+			pet.POST("/create", a.handler.CreatePet) //Метод для создания питомца
+			pet.PUT("/update", a.handler.UpdatePet)  //Метод для изменения информации питомца
 		}
 	}
 
