@@ -39,6 +39,12 @@ func (a *Application) StartServer() {
 		user.POST("/login", a.handler.Login)
 	}
 
+	user := router.Group("/user")
+	{
+		user.POST("/register", a.handler.Register)
+		user.POST("/login", a.handler.Login)
+	}
+
 	api := router.Group("/api")
 	{
 		user := api.Group("/user")
@@ -49,7 +55,9 @@ func (a *Application) StartServer() {
 		pet := api.Group("pet")
 		{
 			image := pet.Group("/image") //Работа с изображениями минио хранилища
+			image := pet.Group("/image") //Работа с изображениями минио хранилища
 			{
+				image.POST("/upload/:userID/:petID", a.handler.UploadImage)   // Метод для загрузки изображения
 				image.POST("/upload/:userID/:petID", a.handler.UploadImage)   // Метод для загрузки изображения
 				image.DELETE("/remove/:userID/:petID", a.handler.RemoveImage) // Метод для удаления изображения
 			}

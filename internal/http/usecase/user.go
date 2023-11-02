@@ -106,3 +106,29 @@ func (uc *UseCase) GetUserById(userID uint) (model.User, error) {
 
 	return user, nil
 }
+
+func (uc *UseCase) LoginUser(userJSON model.LoginUserRequest) (string, error) {
+	if userJSON.PhoneNumber == "" {
+		return "", errors.New("запполните номер телефона")
+	}
+
+	if userJSON.Password == "" {
+		return "", errors.New("заполните пароль")
+	}
+
+	candidate, err := uc.Repository.GetByPhoneNumber(userJSON.PhoneNumber)
+	if err != nil {
+		return "", err
+	}
+
+	if ok := middleware.CheckPasswordHash(userJSON.Password, candidate.Password); !ok {
+		return "", errors.New("пароли не совпадают")
+	}
+
+	token, err := middleware.GenerateJWTToken(uint(candidate.ID))
+	if err != nil {
+		return "", err
+	}
+
+	return token, nil
+}
