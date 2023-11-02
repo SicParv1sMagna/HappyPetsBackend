@@ -1,4 +1,41 @@
 definitions:
+  model.Pet:
+    properties:
+      birthdate:
+        type: string
+      breed_id:
+        type: integer
+      color:
+        type: string
+      created_at:
+        type: string
+      description:
+        type: string
+      food:
+        type: string
+      gender:
+        type: string
+      id:
+        type: integer
+      lives_at:
+        type: string
+      name:
+        type: string
+      passport_id:
+        type: integer
+      photos:
+        items:
+          type: string
+        type: array
+      spicies:
+        type: string
+      status:
+        type: string
+      todo_id:
+        type: integer
+      weight:
+        type: number
+    type: object
   model.RemoveImageResponse:
     type: object
   model.UploadImageResponse:
@@ -103,6 +140,28 @@ paths:
       summary: Uploads an image for a specific pet associated with a user.
       tags:
       - Image
+  /api/pet/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new pet with the provided information
+      parameters:
+      - description: Pet object in JSON format
+        in: body
+        name: pet
+        required: true
+        schema:
+          $ref: '#/definitions/model.Pet'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully created pet
+          schema:
+            $ref: '#/definitions/model.Pet'
+      summary: Create a new pet
+      tags:
+      - Pet
   /api/user/register:
     post:
       consumes:
@@ -123,4 +182,6 @@ paths:
           schema:
             $ref: '#/definitions/model.User'
       summary: Register a new user
+      tags:
+      - User
 swagger: "2.0"

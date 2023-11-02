@@ -130,6 +130,40 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/pet/create": {
+            "post": {
+                "description": "Create a new pet with the provided information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Pet"
+                ],
+                "summary": "Create a new pet",
+                "parameters": [
+                    {
+                        "description": "Pet object in JSON format",
+                        "name": "pet",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Pet"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successfully created pet",
+                        "schema": {
+                            "$ref": "#/definitions/model.Pet"
+                        }
+                    }
+                }
+            }
+        },
         "/api/user/register": {
             "post": {
                 "description": "Register a new user with the provided information",
@@ -138,6 +172,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "User"
                 ],
                 "summary": "Register a new user",
                 "parameters": [
@@ -163,6 +200,62 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "model.Pet": {
+            "type": "object",
+            "properties": {
+                "birthdate": {
+                    "type": "string"
+                },
+                "breed_id": {
+                    "type": "integer"
+                },
+                "color": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "food": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "lives_at": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "passport_id": {
+                    "type": "integer"
+                },
+                "photos": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "spicies": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "todo_id": {
+                    "type": "integer"
+                },
+                "weight": {
+                    "type": "number"
+                }
+            }
+        },
         "model.RemoveImageResponse": {
             "type": "object"
         },

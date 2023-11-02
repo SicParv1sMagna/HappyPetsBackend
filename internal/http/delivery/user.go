@@ -10,6 +10,7 @@ import (
 // @BasePath /api/user/register
 // @Summary Register a new user
 // @Description Register a new user with the provided information
+// @Tags User
 // @Accept json
 // @Produce json
 // @Param user body model.User true "User object in JSON format"
