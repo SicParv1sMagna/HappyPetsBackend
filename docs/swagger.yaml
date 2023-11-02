@@ -225,6 +225,37 @@ paths:
       summary: Обновление информации о питомце.
       tags:
       - Питомец
+  /api/pet/update/{id}:
+    put:
+      consumes:
+      - application/json
+      description: Обновляет информацию о питомце с предоставленными данными.
+      parameters:
+      - description: ID питомца
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Объект Pet в формате JSON
+        in: body
+        name: pet
+        required: true
+        schema:
+          $ref: '#/definitions/model.Pet'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Питомец успешно обновлен
+          schema:
+            $ref: '#/definitions/model.Pet'
+        "400":
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/model.Pet'
+      summary: Обновление информации о питомце.
+      tags:
+      - Питомец
   /api/user/register:
     post:
       consumes:

@@ -211,6 +211,53 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/pet/update/{id}": {
+            "put": {
+                "description": "Обновляет информацию о питомце с предоставленными данными.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Питомец"
+                ],
+                "summary": "Обновление информации о питомце.",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID питомца",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Объект Pet в формате JSON",
+                        "name": "pet",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Pet"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Питомец успешно обновлен",
+                        "schema": {
+                            "$ref": "#/definitions/model.Pet"
+                        }
+                    },
+                    "400": {
+                        "description": "Неверный запрос",
+                        "schema": {
+                            "$ref": "#/definitions/model.Pet"
+                        }
+                    }
+                }
+            }
+        },
         "/api/user/register": {
             "post": {
                 "description": "Регистрация нового пользователя с предоставленной информацией.",
