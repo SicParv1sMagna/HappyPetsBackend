@@ -15,6 +15,40 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/pet/create": {
+            "post": {
+                "description": "Создайте нового питомца с предоставленной информацией.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Питомец"
+                ],
+                "summary": "Создание нового питомца.",
+                "parameters": [
+                    {
+                        "description": "Объект Pet в формате JSON",
+                        "name": "pet",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Pet"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Питомец успешно создан",
+                        "schema": {
+                            "$ref": "#/definitions/model.Pet"
+                        }
+                    }
+                }
+            }
+        },
         "/api/pet/image/remove/{userID}/{petID}": {
             "delete": {
                 "description": "Удаляет изображение из Minio happypets-image(bucket) определенного домашнего животного, связанного с пользователем.",
@@ -166,6 +200,62 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "model.Pet": {
+            "type": "object",
+            "properties": {
+                "birthdate": {
+                    "type": "string"
+                },
+                "breed_id": {
+                    "type": "integer"
+                },
+                "color": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "food": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "lives_at": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "passport_id": {
+                    "type": "integer"
+                },
+                "photos": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "spicies": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "todo_id": {
+                    "type": "integer"
+                },
+                "weight": {
+                    "type": "number"
+                }
+            }
+        },
         "model.RemoveImageResponse": {
             "type": "object",
             "properties": {

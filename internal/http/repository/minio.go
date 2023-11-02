@@ -10,6 +10,12 @@ import (
 	"github.com/minio/minio-go/v7"
 )
 
+type MinioRepository interface{
+    UploadServiceImage(userID, petID uint64, imageBytes []byte, contentType string) (string, error)
+    RemoveServiceImage(userID, petID uint64) error
+}
+
+
 // UploadServiceImage загружает изображение в MinIO bucket и возвращает URL изображения.
 func (r *Repository) UploadServiceImage(userID, petID uint64, imageBytes []byte, contentType string) (string, error) {
     objectName := fmt.Sprintf("users/%d/pets/avatars-%d", userID, petID)

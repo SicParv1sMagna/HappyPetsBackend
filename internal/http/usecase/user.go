@@ -31,7 +31,7 @@ func (uc *UseCase) RegisterUser(userJSON model.User) (model.User, error) {
 		Password:  userJSON.Password,
 	}
 
-	err := uc.Repository.Create(user)
+	err := uc.Repository.CreateUser(user)
 	if err != nil {
 		return model.User{}, err
 	}

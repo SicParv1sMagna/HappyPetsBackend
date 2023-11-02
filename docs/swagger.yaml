@@ -1,4 +1,41 @@
 definitions:
+  model.Pet:
+    properties:
+      birthdate:
+        type: string
+      breed_id:
+        type: integer
+      color:
+        type: string
+      created_at:
+        type: string
+      description:
+        type: string
+      food:
+        type: string
+      gender:
+        type: string
+      id:
+        type: integer
+      lives_at:
+        type: string
+      name:
+        type: string
+      passport_id:
+        type: integer
+      photos:
+        items:
+          type: string
+        type: array
+      spicies:
+        type: string
+      status:
+        type: string
+      todo_id:
+        type: integer
+      weight:
+        type: number
+    type: object
   model.RemoveImageResponse:
     properties:
       message:
@@ -29,6 +66,28 @@ definitions:
 info:
   contact: {}
 paths:
+  /api/pet/create:
+    post:
+      consumes:
+      - application/json
+      description: Создайте нового питомца с предоставленной информацией.
+      parameters:
+      - description: Объект Pet в формате JSON
+        in: body
+        name: pet
+        required: true
+        schema:
+          $ref: '#/definitions/model.Pet'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Питомец успешно создан
+          schema:
+            $ref: '#/definitions/model.Pet'
+      summary: Создание нового питомца.
+      tags:
+      - Питомец
   /api/pet/image/remove/{userID}/{petID}:
     delete:
       consumes:
