@@ -41,6 +41,7 @@ func (a *Application) StartServer() {
 				image.DELETE("/remove/:userID/:petID", a.handler.RemoveImage) // Метод для удаления изображения
 			}
 			pet.POST("/create", a.handler.CreatePet)//Метод для создания питомца
+			pet.PUT("/update", a.handler.UpdatePet)//Метод для изменения информации питомца
 		}
 	}
 
