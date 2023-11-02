@@ -4,19 +4,137 @@
         "contact": {}
     },
     "paths": {
-        "/api/user/register": {
-            "post": {
-                "description": "Register a new user with the provided information",
+        "/api/pet/image/remove/{userID}/{petID}": {
+            "delete": {
+                "description": "Удаляет изображение из Minio happypets-image(bucket) определенного домашнего животного, связанного с пользователем.",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Register a new user",
+                "tags": [
+                    "Изображение"
+                ],
+                "summary": "Удаляет изображение из Minio happypets-image(bucket) определенного домашнего животного, связанного с пользователем.",
                 "parameters": [
                     {
-                        "description": "User object in JSON format",
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "userID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Pet ID",
+                        "name": "petID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Изображение успешно удалено",
+                        "schema": {
+                            "$ref": "#/definitions/model.RemoveImageResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Неверный запрос, неверные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/model.RemoveImageResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Изображение не найдено",
+                        "schema": {
+                            "$ref": "#/definitions/model.RemoveImageResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "$ref": "#/definitions/model.RemoveImageResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/pet/image/upload/{userID}/{petID}": {
+            "post": {
+                "description": "Загружает изображение в Minio happypets-image(bucket) определенного домашнего животного, связанного с пользователем.",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Изображение"
+                ],
+                "summary": "Загружает изображение в Minio happypets-image(bucket) определенного домашнего животного, связанного с пользователем.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "userID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Pet ID",
+                        "name": "petID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Image file",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Изображение успешно загружено",
+                        "schema": {
+                            "$ref": "#/definitions/model.UploadImageResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Неверный запрос, неверные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/model.UploadImageResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "$ref": "#/definitions/model.UploadImageResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/register": {
+            "post": {
+                "description": "Регистрация нового пользователя с предоставленной информацией.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Пользователь"
+                ],
+                "summary": "Регистрация нового пользователя.",
+                "parameters": [
+                    {
+                        "description": "Пользовательский объект в формате JSON",
                         "name": "user",
                         "in": "body",
                         "required": true,
@@ -27,7 +145,7 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "Successfully registered user",
+                        "description": "Успешно зарегистрированный пользователь",
                         "schema": {
                             "$ref": "#/definitions/model.User"
                         }
@@ -37,6 +155,25 @@
         }
     },
     "definitions": {
+        "model.RemoveImageResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UploadImageResponse": {
+            "type": "object",
+            "properties": {
+                "imageURL": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
         "model.User": {
             "type": "object",
             "properties": {
