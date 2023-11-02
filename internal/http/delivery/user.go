@@ -31,3 +31,19 @@ func (h *Handler) Register(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusCreated, gin.H{"user": user})
 }
+
+func (h *Handler) Login(ctx *gin.Context) {
+	var userJSON model.LoginUserRequest
+	if err := ctx.ShouldBindJSON(&userJSON); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	token, err := h.UseCase.LoginUser(userJSON)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"token": token})
+}
