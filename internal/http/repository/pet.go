@@ -19,3 +19,19 @@ func (r*Repository) CreatePet(pet model.Pet) error{
 	}
 	return nil
 }
+
+func (r *Repository) GetPetById(petID uint) (model.Pet, error) {
+	var pet model.Pet
+	if err := r.db.First(&pet, petID).Error; err != nil {
+		return model.Pet{}, fmt.Errorf("ошибка при получении питомца из БД: %v", err)
+	}
+	return pet, nil
+}
+
+
+func (r *Repository) UpdatePet(pet model.Pet) error {
+	if err := r.db.Model(&model.Pet{}).Where("id = ?", pet.ID).Updates(pet).Error; err != nil {
+		return fmt.Errorf("ошибка при обновлении информации о питомце в БД: %v", err)
+	}
+	return nil
+}

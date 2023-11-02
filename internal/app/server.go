@@ -47,6 +47,7 @@ func (a *Application) StartServer() {
 		pet := api.Group("/pet")
 		{
 			pet.POST("/create", a.handler.CreatePet)
+			pet.PUT("/update/:petID", a.handler.UpdatePet)
 		}
 	}
 
