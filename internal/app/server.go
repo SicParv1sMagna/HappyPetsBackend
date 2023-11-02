@@ -20,12 +20,6 @@ func (a *Application) StartServer() {
 
 	// Создаем роутинг
 	router := gin.Default()
-	// Обработчик OPTIONS запросов
-	router.OPTIONS("/*path", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "options",
-		})
-	})
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:5173"}, // List of allowed origins
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
