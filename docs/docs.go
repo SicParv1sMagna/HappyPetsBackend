@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/image/remove/{userID}/{petID}": {
+        "/api/pet/image/remove/{userID}/{petID}": {
             "delete": {
                 "description": "Удаляет изображение из Minio happypets-image(bucket) определенного домашнего животного, связанного с пользователем.",
                 "consumes": [
@@ -72,7 +72,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/image/upload/{userID}/{petID}": {
+        "/api/pet/image/upload/{userID}/{petID}": {
             "post": {
                 "description": "Загружает изображение в Minio happypets-image(bucket) определенного домашнего животного, связанного с пользователем.",
                 "consumes": [

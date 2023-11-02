@@ -39,10 +39,13 @@ func (a *Application) StartServer() {
 		{
 			user.POST("/register", a.handler.Register)
 		}
-		image := api.Group("/image")//Работа с изображениями минио хранилища
+		pet := api.Group("pet")
 		{
-			image.POST("/upload/:userID/:petID", a.handler.UploadImage) // Метод для загрузки изображения
-			image.DELETE("/remove/:userID/:petID", a.handler.RemoveImage) // Метод для удаления изображения
+			image := pet.Group("/image")//Работа с изображениями минио хранилища
+			{
+				image.POST("/upload/:userID/:petID", a.handler.UploadImage) // Метод для загрузки изображения
+				image.DELETE("/remove/:userID/:petID", a.handler.RemoveImage) // Метод для удаления изображения
+			}
 		}
 		pet := api.Group("/pet")
 		{

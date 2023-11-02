@@ -66,7 +66,7 @@ definitions:
 info:
   contact: {}
 paths:
-  /api/image/remove/{userID}/{petID}:
+  /api/pet/image/remove/{userID}/{petID}:
     delete:
       consumes:
       - application/json
@@ -106,7 +106,7 @@ paths:
         домашнего животного, связанного с пользователем.
       tags:
       - Изображение
-  /api/image/upload/{userID}/{petID}:
+  /api/pet/image/upload/{userID}/{petID}:
     post:
       consumes:
       - multipart/form-data

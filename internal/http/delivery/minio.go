@@ -19,7 +19,7 @@ import (
 // @Success 200 {object} model.UploadImageResponse "Изображение успешно загружено"
 // @Failure 400 {object} model.UploadImageResponse "Неверный запрос, неверные входные данные"
 // @Failure 500 {object} model.UploadImageResponse "Внутренняя ошибка сервера"
-// @Router /api/image/upload/{userID}/{petID} [post]
+// @Router /api/pet/image/upload/{userID}/{petID} [post]
 func (h *Handler) UploadImage(ctx *gin.Context) {
 	userID, err := strconv.Atoi(ctx.Param("userID"))
 	if err != nil {
@@ -57,7 +57,7 @@ func (h *Handler) UploadImage(ctx *gin.Context) {
 // @Failure 400 {object} model.RemoveImageResponse "Неверный запрос, неверные входные данные"
 // @Failure 404 {object} model.RemoveImageResponse "Изображение не найдено"
 // @Failure 500 {object} model.RemoveImageResponse "Внутренняя ошибка сервера"
-// @Router /api/image/remove/{userID}/{petID} [delete]
+// @Router /api/pet/image/remove/{userID}/{petID} [delete]
 func (h *Handler) RemoveImage(ctx *gin.Context) {
 	userID, err := strconv.Atoi(ctx.Param("userID"))
 	if err != nil {
