@@ -247,6 +247,7 @@
                 }
             }
         },
+>>>>>>> 327bfac ([HP-22]PUT UpdatePet method)
         "/api/user/register": {
             "post": {
                 "description": "Регистрация нового пользователя с предоставленной информацией.",

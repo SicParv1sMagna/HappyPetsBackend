@@ -9,6 +9,7 @@ import (
 type PetUseCase interface {
 	CreatePet(pet model.Pet) (model.Pet, error)
 	UpdatePet(pet model.Pet) (model.Pet, error)
+	UpdatePet(pet model.Pet) (model.Pet, error)
 }
 
 func (uc *UseCase) CreatePet(pet model.Pet) (model.Pet, error) {

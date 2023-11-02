@@ -65,3 +65,36 @@ func (h *Handler) UpdatePet(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{"pet": pet, "message": "Питомец успешно обновлен"})
 }
+
+// @Summary Обновление информации о питомце.
+// @Description Обновляет информацию о питомце с предоставленными данными.
+// @Tags Питомец
+// @Accept json
+// @Produce json
+// @Param id path integer true "ID питомца"
+// @Param pet body model.Pet true "Объект Pet в формате JSON"
+// @Success 200 {object} model.Pet "Питомец успешно обновлен"
+// @Failure 400 {object} model.Pet "Неверный запрос"
+// @Router /api/pet/update/{id} [put]
+func (h *Handler) UpdatePet(ctx *gin.Context) {
+	pet_id, err := strconv.ParseUint(ctx.Param("petID"), 10, 64)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "неверный ID питомца"})
+		return
+	}
+
+	var petJSON model.Pet
+	if err := ctx.ShouldBindJSON(&petJSON); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "ошибка при чтении JSON файла"})
+		return
+	}
+
+	petJSON.ID = pet_id
+	pet, err := h.UseCase.UpdatePet(petJSON)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "ошибка при обновлении питомца"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"pet": pet, "message": "Питомец успешно обновлен"})
+}
