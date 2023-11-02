@@ -20,4 +20,6 @@ type RemoveImageRequest struct {
 }
 
 // RemoveImageResponse represents the response structure for the RemoveImage operation.
-type RemoveImageResponse struct{}
+type RemoveImageResponse struct{
+	Message  string `json:"message"`
+}

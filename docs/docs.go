@@ -17,7 +17,7 @@ const docTemplate = `{
     "paths": {
         "/api/image/remove/{userID}/{petID}": {
             "delete": {
-                "description": "Removes an image for a specific pet associated with a user.",
+                "description": "Удаляет изображение из Minio happypets-image(bucket) определенного домашнего животного, связанного с пользователем.",
                 "consumes": [
                     "application/json"
                 ],
@@ -25,9 +25,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Image"
+                    "Изображение"
                 ],
-                "summary": "Removes an image for a specific pet associated with a user.",
+                "summary": "Удаляет изображение из Minio happypets-image(bucket) определенного домашнего животного, связанного с пользователем.",
                 "parameters": [
                     {
                         "type": "string",
@@ -46,25 +46,25 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "204": {
-                        "description": "Image removed successfully",
+                        "description": "Изображение успешно удалено",
                         "schema": {
                             "$ref": "#/definitions/model.RemoveImageResponse"
                         }
                     },
                     "400": {
-                        "description": "Bad request, invalid input data",
+                        "description": "Неверный запрос, неверные входные данные",
                         "schema": {
                             "$ref": "#/definitions/model.RemoveImageResponse"
                         }
                     },
                     "404": {
-                        "description": "Image not found",
+                        "description": "Изображение не найдено",
                         "schema": {
                             "$ref": "#/definitions/model.RemoveImageResponse"
                         }
                     },
                     "500": {
-                        "description": "Internal server error",
+                        "description": "Внутренняя ошибка сервера",
                         "schema": {
                             "$ref": "#/definitions/model.RemoveImageResponse"
                         }
@@ -74,7 +74,7 @@ const docTemplate = `{
         },
         "/api/image/upload/{userID}/{petID}": {
             "post": {
-                "description": "Uploads an image for a specific pet associated with a user.",
+                "description": "Загружает изображение в Minio happypets-image(bucket) определенного домашнего животного, связанного с пользователем.",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -82,9 +82,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Image"
+                    "Изображение"
                 ],
-                "summary": "Uploads an image for a specific pet associated with a user.",
+                "summary": "Загружает изображение в Minio happypets-image(bucket) определенного домашнего животного, связанного с пользователем.",
                 "parameters": [
                     {
                         "type": "string",
@@ -110,19 +110,19 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Image uploaded successfully",
+                        "description": "Изображение успешно загружено",
                         "schema": {
                             "$ref": "#/definitions/model.UploadImageResponse"
                         }
                     },
                     "400": {
-                        "description": "Bad request, invalid input data",
+                        "description": "Неверный запрос, неверные входные данные",
                         "schema": {
                             "$ref": "#/definitions/model.UploadImageResponse"
                         }
                     },
                     "500": {
-                        "description": "Internal server error",
+                        "description": "Внутренняя ошибка сервера",
                         "schema": {
                             "$ref": "#/definitions/model.UploadImageResponse"
                         }
@@ -132,7 +132,7 @@ const docTemplate = `{
         },
         "/api/pet/create": {
             "post": {
-                "description": "Create a new pet with the provided information",
+                "description": "Создайте нового питомца с предоставленной информацией.",
                 "consumes": [
                     "application/json"
                 ],
@@ -140,12 +140,12 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Pet"
+                    "Питомец"
                 ],
-                "summary": "Create a new pet",
+                "summary": "Создание нового питомца.",
                 "parameters": [
                     {
-                        "description": "Pet object in JSON format",
+                        "description": "Объект Pet в формате JSON",
                         "name": "pet",
                         "in": "body",
                         "required": true,
@@ -156,7 +156,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "201": {
-                        "description": "Successfully created pet",
+                        "description": "Питомец успешно создан",
                         "schema": {
                             "$ref": "#/definitions/model.Pet"
                         }
@@ -166,7 +166,7 @@ const docTemplate = `{
         },
         "/api/user/register": {
             "post": {
-                "description": "Register a new user with the provided information",
+                "description": "Регистрация нового пользователя с предоставленной информацией.",
                 "consumes": [
                     "application/json"
                 ],
@@ -174,12 +174,12 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User"
+                    "Пользователь"
                 ],
-                "summary": "Register a new user",
+                "summary": "Регистрация нового пользователя.",
                 "parameters": [
                     {
-                        "description": "User object in JSON format",
+                        "description": "Пользовательский объект в формате JSON",
                         "name": "user",
                         "in": "body",
                         "required": true,
@@ -190,7 +190,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "201": {
-                        "description": "Successfully registered user",
+                        "description": "Успешно зарегистрированный пользователь",
                         "schema": {
                             "$ref": "#/definitions/model.User"
                         }
@@ -257,7 +257,12 @@ const docTemplate = `{
             }
         },
         "model.RemoveImageResponse": {
-            "type": "object"
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
         },
         "model.UploadImageResponse": {
             "type": "object",

@@ -44,7 +44,7 @@ func (uc *UseCase) RemoveImage(userID uint64, petID uint64) error {
 	// Вызов метода репозитория для удаления изображения из MinIO
 	err := uc.Repository.RemoveServiceImage(userID, petID)
 	if err != nil {
-		return err
+		return fmt.Errorf("ошибка при удаления изображения из харнилища: %v", err)
 	}
 
 	return nil
