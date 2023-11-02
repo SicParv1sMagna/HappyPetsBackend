@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/SicParv1sMagna/HappyPetsBackend/internal/model"
 )
@@ -26,7 +25,7 @@ func (uc *UseCase) CreatePet(pet model.Pet) (model.Pet, error) {
 
 	err := uc.Repository.CreatePet(pet)
 	if err != nil {
-		return model.Pet{}, fmt.Errorf("ошибка при создании питомца: %v", err)
+		return model.Pet{}, errors.New("ошибка при создании питомца")
 	}
 
 	return pet, nil

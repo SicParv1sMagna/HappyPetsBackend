@@ -46,10 +46,7 @@ func (a *Application) StartServer() {
 				image.POST("/upload/:userID/:petID", a.handler.UploadImage) // Метод для загрузки изображения
 				image.DELETE("/remove/:userID/:petID", a.handler.RemoveImage) // Метод для удаления изображения
 			}
-		}
-		pet := api.Group("/pet")
-		{
-			pet.POST("/create", a.handler.CreatePet)
+			pet.POST("/create", a.handler.CreatePet)//Метод для создания питомца
 		}
 	}
 

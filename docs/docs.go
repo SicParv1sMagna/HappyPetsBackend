@@ -15,6 +15,40 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/pet/create": {
+            "post": {
+                "description": "Создайте нового питомца с предоставленной информацией.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Питомец"
+                ],
+                "summary": "Создание нового питомца.",
+                "parameters": [
+                    {
+                        "description": "Объект Pet в формате JSON",
+                        "name": "pet",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Pet"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Питомец успешно создан",
+                        "schema": {
+                            "$ref": "#/definitions/model.Pet"
+                        }
+                    }
+                }
+            }
+        },
         "/api/pet/image/remove/{userID}/{petID}": {
             "delete": {
                 "description": "Удаляет изображение из Minio happypets-image(bucket) определенного домашнего животного, связанного с пользователем.",
@@ -125,40 +159,6 @@ const docTemplate = `{
                         "description": "Внутренняя ошибка сервера",
                         "schema": {
                             "$ref": "#/definitions/model.UploadImageResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/pet/create": {
-            "post": {
-                "description": "Создайте нового питомца с предоставленной информацией.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Питомец"
-                ],
-                "summary": "Создание нового питомца.",
-                "parameters": [
-                    {
-                        "description": "Объект Pet в формате JSON",
-                        "name": "pet",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.Pet"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Питомец успешно создан",
-                        "schema": {
-                            "$ref": "#/definitions/model.Pet"
                         }
                     }
                 }
