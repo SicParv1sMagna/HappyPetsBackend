@@ -19,7 +19,7 @@ func (r *Repository) UploadServiceImage(userID, petID uint64, imageBytes []byte,
         ContentType: contentType,
     })
     if err != nil {
-        return "", err
+        return "", fmt.Errorf("ошибка при добавлении изображения в минио бакет: %v", err)
     }
 
     // Формирование URL изображения
@@ -32,10 +32,7 @@ func (r *Repository) RemoveServiceImage(userID, petID uint64) error {
     objectName := fmt.Sprintf("users/%d/pets/avatars-%d", userID, petID)
     err := r.mc.RemoveObject(context.TODO(), "happypets-image", objectName, minio.RemoveObjectOptions{})
     if err != nil {
-        fmt.Println("Failed to remove object from MinIO:", err)
-        // Обработка ошибки удаления изображения из MinIO
-        return err
+        return fmt.Errorf("ошибка при удалении изображения из минио бакета: %v", err)
     }
-    fmt.Println("Object removed from MinIO successfully:", objectName)
     return nil
 }

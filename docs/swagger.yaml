@@ -1,5 +1,8 @@
 definitions:
   model.RemoveImageResponse:
+    properties:
+      message:
+        type: string
     type: object
   model.UploadImageResponse:
     properties:
@@ -30,7 +33,8 @@ paths:
     delete:
       consumes:
       - application/json
-      description: Removes an image for a specific pet associated with a user.
+      description: Удаляет изображение из Minio happypets-image(bucket) определенного
+        домашнего животного, связанного с пользователем.
       parameters:
       - description: User ID
         in: path
@@ -46,29 +50,31 @@ paths:
       - application/json
       responses:
         "204":
-          description: Image removed successfully
+          description: Изображение успешно удалено
           schema:
             $ref: '#/definitions/model.RemoveImageResponse'
         "400":
-          description: Bad request, invalid input data
+          description: Неверный запрос, неверные входные данные
           schema:
             $ref: '#/definitions/model.RemoveImageResponse'
         "404":
-          description: Image not found
+          description: Изображение не найдено
           schema:
             $ref: '#/definitions/model.RemoveImageResponse'
         "500":
-          description: Internal server error
+          description: Внутренняя ошибка сервера
           schema:
             $ref: '#/definitions/model.RemoveImageResponse'
-      summary: Removes an image for a specific pet associated with a user.
+      summary: Удаляет изображение из Minio happypets-image(bucket) определенного
+        домашнего животного, связанного с пользователем.
       tags:
-      - Image
+      - Изображение
   /api/image/upload/{userID}/{petID}:
     post:
       consumes:
       - multipart/form-data
-      description: Uploads an image for a specific pet associated with a user.
+      description: Загружает изображение в Minio happypets-image(bucket) определенного
+        домашнего животного, связанного с пользователем.
       parameters:
       - description: User ID
         in: path
@@ -89,27 +95,28 @@ paths:
       - application/json
       responses:
         "200":
-          description: Image uploaded successfully
+          description: Изображение успешно загружено
           schema:
             $ref: '#/definitions/model.UploadImageResponse'
         "400":
-          description: Bad request, invalid input data
+          description: Неверный запрос, неверные входные данные
           schema:
             $ref: '#/definitions/model.UploadImageResponse'
         "500":
-          description: Internal server error
+          description: Внутренняя ошибка сервера
           schema:
             $ref: '#/definitions/model.UploadImageResponse'
-      summary: Uploads an image for a specific pet associated with a user.
+      summary: Загружает изображение в Minio happypets-image(bucket) определенного
+        домашнего животного, связанного с пользователем.
       tags:
-      - Image
+      - Изображение
   /api/user/register:
     post:
       consumes:
       - application/json
-      description: Register a new user with the provided information
+      description: Регистрация нового пользователя с предоставленной информацией.
       parameters:
-      - description: User object in JSON format
+      - description: Пользовательский объект в формате JSON
         in: body
         name: user
         required: true
@@ -119,8 +126,10 @@ paths:
       - application/json
       responses:
         "201":
-          description: Successfully registered user
+          description: Успешно зарегистрированный пользователь
           schema:
             $ref: '#/definitions/model.User'
-      summary: Register a new user
+      summary: Регистрация нового пользователя.
+      tags:
+      - Пользователь
 swagger: "2.0"

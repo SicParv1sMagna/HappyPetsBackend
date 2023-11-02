@@ -8,12 +8,13 @@ import (
 )
 
 // @BasePath /api/user/register
-// @Summary Register a new user
-// @Description Register a new user with the provided information
+// @Summary Регистрация нового пользователя.
+// @Description Регистрация нового пользователя с предоставленной информацией.
+// @Tags Пользователь
 // @Accept json
 // @Produce json
-// @Param user body model.User true "User object in JSON format"
-// @Success 201 {object} model.User "Successfully registered user"
+// @Param user body model.User true "Пользовательский объект в формате JSON"
+// @Success 201 {object} model.User "Успешно зарегистрированный пользователь"
 // @Router /api/user/register [post]
 func (h *Handler) Register(ctx *gin.Context) {
 	var userJSON model.User
