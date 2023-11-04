@@ -19,8 +19,7 @@ func (r*Repository) CreatePet(pet model.Pet) error{
 	}
 	return nil
 }
-
-func (r *Repository) UpdatePet(pet model.UpdatePetRequest) error {
+func (r *Repository) UpdatePet(pet model.PetUpdateRequest) error {
 	if err := r.db.Model(&model.Pet{}).Where("id = ?", pet.ID).Updates(pet).Error; err != nil {
 		return errors.New("ошибка при обновлении информации о питомце в БД")
 	}

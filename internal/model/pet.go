@@ -23,7 +23,7 @@ type Pet struct {
 	Photos      []string  `json:"photos" gorm:"-"`
 }
 
-type UpdatePetRequest struct {
+type PetUpdateRequest struct {
 	ID          uint64    `json:"id"`
 	Name        string    `json:"name"`
 	Birthdate   string    `json:"birthdate"`

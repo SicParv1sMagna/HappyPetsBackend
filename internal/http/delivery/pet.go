@@ -39,9 +39,9 @@ func (h *Handler) CreatePet(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path integer true "ID питомца"
-// @Param pet body model.UpdatePetRequest true "Объект UpdatePetRequest в формате JSON"
-// @Success 200 {object} model.UpdatePetRequest "Питомец успешно обновлен"
-// @Failure 400 {object} model.UpdatePetRequest "Неверный запрос"
+// @Param pet body model.PetUpdateRequest true "Объект PetUpdateRequest в формате JSON"
+// @Success 200 {object} model.PetUpdateRequest "Питомец успешно обновлен"
+// @Failure 400 {object} model.PetUpdateRequest "Неверный запрос"
 // @Router /api/pet/update/{id} [put]
 func (h *Handler) UpdatePet(ctx *gin.Context) {
 	pet_id, err := strconv.ParseUint(ctx.Param("petID"), 10, 64)
@@ -50,7 +50,7 @@ func (h *Handler) UpdatePet(ctx *gin.Context) {
 		return
 	}
 
-	var petJSON model.UpdatePetRequest
+	var petJSON model.PetUpdateRequest
 	if err := ctx.ShouldBindJSON(&petJSON); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "ошибка при чтении JSON файла"})
 		return

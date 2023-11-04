@@ -222,12 +222,12 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "Объект UpdatePetRequest в формате JSON",
+                        "description": "Объект PetUpdateRequest в формате JSON",
                         "name": "pet",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.UpdatePetRequest"
+                            "$ref": "#/definitions/model.PetUpdateRequest"
                         }
                     }
                 ],
@@ -235,13 +235,13 @@ const docTemplate = `{
                     "200": {
                         "description": "Питомец успешно обновлен",
                         "schema": {
-                            "$ref": "#/definitions/model.UpdatePetRequest"
+                            "$ref": "#/definitions/model.PetUpdateRequest"
                         }
                     },
                     "400": {
                         "description": "Неверный запрос",
                         "schema": {
-                            "$ref": "#/definitions/model.UpdatePetRequest"
+                            "$ref": "#/definitions/model.PetUpdateRequest"
                         }
                     }
                 }
@@ -340,15 +340,7 @@ const docTemplate = `{
                 }
             }
         },
-        "model.RemoveImageResponse": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.UpdatePetRequest": {
+        "model.PetUpdateRequest": {
             "type": "object",
             "properties": {
                 "birthdate": {
@@ -383,6 +375,14 @@ const docTemplate = `{
                 },
                 "weight": {
                     "type": "number"
+                }
+            }
+        },
+        "model.RemoveImageResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
                 }
             }
         },
