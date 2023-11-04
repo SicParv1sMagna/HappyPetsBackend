@@ -21,7 +21,7 @@ func (a *Application) StartServer() {
 	// Создаем роутинг
 	router := gin.Default()
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173"}, // List of allowed origins
+		AllowOrigins:     []string{"*"}, // List of allowed origins
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
 		AllowHeaders:     []string{"Content-Type", "Authorization"},
 		AllowCredentials: true, // Enable credentials (e.g., cookies)

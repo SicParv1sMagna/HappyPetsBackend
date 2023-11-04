@@ -222,12 +222,12 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "Объект Pet в формате JSON",
+                        "description": "Объект UpdatePetRequest в формате JSON",
                         "name": "pet",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.Pet"
+                            "$ref": "#/definitions/model.UpdatePetRequest"
                         }
                     }
                 ],
@@ -235,13 +235,13 @@ const docTemplate = `{
                     "200": {
                         "description": "Питомец успешно обновлен",
                         "schema": {
-                            "$ref": "#/definitions/model.Pet"
+                            "$ref": "#/definitions/model.UpdatePetRequest"
                         }
                     },
                     "400": {
                         "description": "Неверный запрос",
                         "schema": {
-                            "$ref": "#/definitions/model.Pet"
+                            "$ref": "#/definitions/model.UpdatePetRequest"
                         }
                     }
                 }
@@ -345,6 +345,44 @@ const docTemplate = `{
             "properties": {
                 "message": {
                     "type": "string"
+                }
+            }
+        },
+        "model.UpdatePetRequest": {
+            "type": "object",
+            "properties": {
+                "birthdate": {
+                    "type": "string"
+                },
+                "color": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "food": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "photos": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "spicies": {
+                    "type": "string"
+                },
+                "weight": {
+                    "type": "number"
                 }
             }
         },

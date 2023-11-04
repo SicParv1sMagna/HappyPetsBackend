@@ -32,16 +32,16 @@ func (uc *UseCase) CreatePet(pet model.Pet) (model.Pet, error) {
 	return pet, nil
 }
 
-func (uc *UseCase) UpdatePet(pet model.Pet) (model.Pet, error) {
+func (uc *UseCase) UpdatePet(pet model.UpdatePetRequest) (model.UpdatePetRequest, error) {
 	if pet.ID == 0 {
-		return model.Pet{}, errors.New("неверный идентификатор питомца")
+		return model.UpdatePetRequest{}, errors.New("неверный идентификатор питомца")
 	}
 
 	// Другие проверки на валидность полей животного добавим позже
 
 	err := uc.Repository.UpdatePet(pet)
 	if err != nil {
-		return model.Pet{}, errors.New("ошибка при обновлении информации о питомце")
+		return model.UpdatePetRequest{}, errors.New("ошибка при обновлении информации о питомце")
 	}
 
 	return pet, nil
