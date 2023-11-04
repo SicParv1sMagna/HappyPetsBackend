@@ -8,6 +8,7 @@ import (
 
 type PetUseCase interface {
 	CreatePet(pet model.Pet) (model.Pet, error)
+	UpdatePet(pet model.Pet) (model.Pet, error)
 }
 
 func (uc *UseCase) CreatePet(pet model.Pet) (model.Pet, error) {
@@ -30,3 +31,19 @@ func (uc *UseCase) CreatePet(pet model.Pet) (model.Pet, error) {
 
 	return pet, nil
 }
+
+func (uc *UseCase) UpdatePet(pet model.PetUpdateRequest) (model.PetUpdateRequest, error) {
+	if pet.ID == 0 {
+		return model.PetUpdateRequest{}, errors.New("неверный идентификатор питомца")
+	}
+
+	// Другие проверки на валидность полей животного добавим позже
+
+	err := uc.Repository.UpdatePet(pet)
+	if err != nil {
+		return model.PetUpdateRequest{}, errors.New("ошибка при обновлении информации о питомце")
+	}
+
+	return pet, nil
+}
+
