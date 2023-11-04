@@ -246,7 +246,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Питомец успешно создан",
                         "schema": {
-                            "$ref": "#/definitions/model.Pet"
+                            "$ref": "#/definitions/model.UpdatePetRequest"
                         }
                     }
                 }
@@ -274,12 +274,12 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "Объект Pet в формате JSON",
+                        "description": "Объект UpdatePetRequest в формате JSON",
                         "name": "pet",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.Pet"
+                            "$ref": "#/definitions/model.UpdatePetRequest"
                         }
                     }
                 ],
@@ -287,7 +287,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Питомец успешно обновлен",
                         "schema": {
-                            "$ref": "#/definitions/model.Pet"
+                            "$ref": "#/definitions/model.UpdatePetRequest"
                         }
                     },
                     "400": {

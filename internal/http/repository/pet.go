@@ -44,7 +44,7 @@ func (r *Repository) GetPetById(petID uint) (model.Pet, error) {
 	return pet, nil
 }
 
-func (r *Repository) UpdatePet(pet model.Pet) error {
+func (r *Repository) UpdatePet(pet model.UpdatePetRequest) error {
 	if err := r.db.Model(&model.Pet{}).Where("id = ?", pet.ID).Updates(pet).Error; err != nil {
 		return fmt.Errorf("ошибка при обновлении информации о питомце в БД: %v", err)
 	}
