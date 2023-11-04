@@ -164,42 +164,6 @@ const docTemplate = `{
                 }
             }
         },
-<<<<<<< HEAD
-=======
-        "/api/pet/create": {
-            "post": {
-                "description": "Создайте нового питомца с предоставленной информацией.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Питомец"
-                ],
-                "summary": "Создание нового питомца.",
-                "parameters": [
-                    {
-                        "description": "Объект Pet в формате JSON",
-                        "name": "pet",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.Pet"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Питомец успешно создан",
-                        "schema": {
-                            "$ref": "#/definitions/model.Pet"
-                        }
-                    }
-                }
-            }
-        },
         "/api/pet/update/{id}": {
             "put": {
                 "description": "Обновляет информацию о питомце с предоставленными данными.",
@@ -247,7 +211,6 @@ const docTemplate = `{
                 }
             }
         },
->>>>>>> 327bfac ([HP-22]PUT UpdatePet method)
         "/api/user/register": {
             "post": {
                 "description": "Регистрация нового пользователя с предоставленной информацией.",

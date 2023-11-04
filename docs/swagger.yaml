@@ -194,30 +194,6 @@ paths:
         домашнего животного, связанного с пользователем.
       tags:
       - Изображение
-<<<<<<< HEAD
-=======
-  /api/pet/create:
-    post:
-      consumes:
-      - application/json
-      description: Создайте нового питомца с предоставленной информацией.
-      parameters:
-      - description: Объект Pet в формате JSON
-        in: body
-        name: pet
-        required: true
-        schema:
-          $ref: '#/definitions/model.Pet'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Питомец успешно создан
-          schema:
-            $ref: '#/definitions/model.Pet'
-      summary: Создание нового питомца.
-      tags:
-      - Питомец
   /api/pet/update/{id}:
     put:
       consumes:
@@ -249,7 +225,6 @@ paths:
       summary: Обновление информации о питомце.
       tags:
       - Питомец
->>>>>>> 327bfac ([HP-22]PUT UpdatePet method)
   /api/user/register:
     post:
       consumes:
