@@ -20,6 +20,12 @@ func (a *Application) StartServer() {
 
 	// Создаем роутинг
 	router := gin.Default()
+	// Обработчик OPTIONS запросов
+	router.OPTIONS("/*path", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "options",
+		})
+	})
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"}, // List of allowed origins
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
@@ -27,21 +33,28 @@ func (a *Application) StartServer() {
 		AllowCredentials: true, // Enable credentials (e.g., cookies)
 	}))
 
+	user := router.Group("/user")
+	{
+		user.POST("/register", a.handler.Register)
+		user.POST("/login", a.handler.Login)
+	}
+
 	api := router.Group("/api")
 	{
-		user := api.Group("/user")
+		user = api.Group("/user")
 		{
-			user.POST("/register", a.handler.Register)
+			user.GET("/:userID", a.handler.GetUserById)
+			user.PUT("/:userID", a.handler.UpdateUserData)
 		}
 		pet := api.Group("pet")
 		{
-			image := pet.Group("/image")//Работа с изображениями минио хранилища
+			image := pet.Group("/image") //Работа с изображениями минио хранилища
 			{
-				image.POST("/upload/:userID/:petID", a.handler.UploadImage) // Метод для загрузки изображения
+				image.POST("/upload/:userID/:petID", a.handler.UploadImage)   // Метод для загрузки изображения
 				image.DELETE("/remove/:userID/:petID", a.handler.RemoveImage) // Метод для удаления изображения
 			}
-			pet.POST("/create", a.handler.CreatePet)//Метод для создания питомца
-			pet.PUT("/update", a.handler.UpdatePet)//Метод для изменения информации питомца
+			pet.POST("/create", a.handler.CreatePet) //Метод для создания питомца
+			pet.PUT("/update", a.handler.UpdatePet)  //Метод для изменения информации питомца
 		}
 	}
 

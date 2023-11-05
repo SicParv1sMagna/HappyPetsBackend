@@ -164,7 +164,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/pet/update/{id}": {
+        "/api/pet/update/{petID}": {
             "put": {
                 "description": "Обновляет информацию о питомце с предоставленными данными.",
                 "consumes": [
@@ -181,7 +181,7 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "description": "ID питомца",
-                        "name": "id",
+                        "name": "petID",
                         "in": "path",
                         "required": true
                     },
@@ -211,54 +211,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/pet/update/{id}": {
-            "put": {
-                "description": "Обновляет информацию о питомце с предоставленными данными.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Питомец"
-                ],
-                "summary": "Обновление информации о питомце.",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "ID питомца",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Объект UpdatePetRequest в формате JSON",
-                        "name": "pet",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.UpdatePetRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Питомец успешно обновлен",
-                        "schema": {
-                            "$ref": "#/definitions/model.UpdatePetRequest"
-                        }
-                    },
-                    "400": {
-                        "description": "Неверный запрос",
-                        "schema": {
-                            "$ref": "#/definitions/model.UpdatePetRequest"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/user/register": {
+        "/user/register": {
             "post": {
                 "description": "Регистрация нового пользователя с предоставленной информацией.",
                 "consumes": [
@@ -287,6 +240,167 @@ const docTemplate = `{
                         "description": "Успешно зарегистрированный пользователь",
                         "schema": {
                             "$ref": "#/definitions/model.User"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/login": {
+            "post": {
+                "description": "Авторизация пользователя и генерация JWT-токена",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Пользователь"
+                ],
+                "summary": "Вход пользователя",
+                "parameters": [
+                    {
+                        "description": "Данные для входа",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UserLoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешный ответ",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Неверный запрос",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{userID}": {
+            "get": {
+                "description": "Получение данных пользователя по его идентификатору",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Пользователь"
+                ],
+                "summary": "Получить пользователя по идентификатору",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Идентификатор пользователя",
+                        "name": "userID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешный ответ",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Неверный запрос",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Обновление данных пользователя по его идентификатору",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Пользователь"
+                ],
+                "summary": "Обновить данные пользователя",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Идентификатор пользователя",
+                        "name": "userID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Данные для обновления",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UserUpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешный ответ",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Неверный запрос",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
                         }
                     }
                 }
@@ -396,44 +510,6 @@ const docTemplate = `{
                 }
             }
         },
-        "model.UpdatePetRequest": {
-            "type": "object",
-            "properties": {
-                "birthdate": {
-                    "type": "string"
-                },
-                "color": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "food": {
-                    "type": "string"
-                },
-                "gender": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "photos": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "spicies": {
-                    "type": "string"
-                },
-                "weight": {
-                    "type": "number"
-                }
-            }
-        },
         "model.UploadImageResponse": {
             "type": "object",
             "properties": {
@@ -461,6 +537,43 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                },
+                "repeat_password": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UserLoginRequest": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UserUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "phone_number": {
                     "type": "string"
                 },
                 "repeat_password": {

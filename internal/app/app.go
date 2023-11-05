@@ -1,6 +1,8 @@
 package app
 
 import (
+	"fmt"
+
 	"github.com/SicParv1sMagna/HappyPetsBackend/internal/dsn"
 	"github.com/SicParv1sMagna/HappyPetsBackend/internal/http/delivery"
 	"github.com/SicParv1sMagna/HappyPetsBackend/internal/http/repository"
@@ -18,9 +20,11 @@ type Application struct {
 func New() (Application, error) {
 	_ = godotenv.Load()
 	repo, err := repository.New(dsn.FromEnv())
-	uc := usecase.NewUseCase(*repo)
-	h := delivery.NewHandler(*uc)
+	uc := usecase.NewUseCase(repo)
+	h := delivery.NewHandler(uc)
+
 	if err != nil {
+		fmt.Println(err)
 		return Application{}, err
 	}
 

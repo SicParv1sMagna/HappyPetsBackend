@@ -46,4 +46,3 @@ func (uc *UseCase) UpdatePet(pet model.PetUpdateRequest) (model.PetUpdateRequest
 
 	return pet, nil
 }
-

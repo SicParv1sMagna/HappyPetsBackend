@@ -8,7 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// @BasePath /api/pet/create
 // @Summary Создание нового питомца.
 // @Description Создайте нового питомца с предоставленной информацией.
 // @Tags Питомец
@@ -30,7 +29,7 @@ func (h *Handler) CreatePet(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{"pet": pet, "message":"Питомец успешно создан"})
+	ctx.JSON(http.StatusCreated, gin.H{"pet": pet, "message": "Питомец успешно создан"})
 }
 
 // @Summary Обновление информации о питомце.
