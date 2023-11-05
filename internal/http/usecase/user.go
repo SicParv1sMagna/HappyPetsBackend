@@ -10,6 +10,7 @@ import (
 type UserUseCase interface {
 	RegisterUser(userJSON model.User) (model.User, error)
 	LoginUser(userJSON model.User) (model.User, error)
+	GetUserById(user uint) (model.User, error)
 }
 
 func (uc *UseCase) RegisterUser(userJSON model.User) (model.User, error) {
@@ -67,7 +68,7 @@ func (uc *UseCase) RegisterUser(userJSON model.User) (model.User, error) {
 	return user, nil
 }
 
-func (uc *UseCase) LoginUser(userJSON model.LoginUserRequest) (string, error) {
+func (uc *UseCase) LoginUser(userJSON model.UserLoginRequest) (string, error) {
 	if userJSON.PhoneNumber == "" {
 		return "", errors.New("запполните номер телефона")
 	}
@@ -91,4 +92,17 @@ func (uc *UseCase) LoginUser(userJSON model.LoginUserRequest) (string, error) {
 	}
 
 	return token, nil
+}
+
+func (uc *UseCase) GetUserById(userID uint) (model.User, error) {
+	if userID < 1 {
+		return model.User{}, errors.New("id не может быть отрицательным")
+	}
+
+	user, err := uc.Repository.GetUserById(userID)
+	if err != nil {
+		return model.User{}, err
+	}
+
+	return user, nil
 }

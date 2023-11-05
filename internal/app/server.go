@@ -35,6 +35,11 @@ func (a *Application) StartServer() {
 
 	api := router.Group("/api")
 	{
+		user := api.Group("/user")
+		{
+			user.GET("/:userID", a.handler.GetUserById)
+			user.PUT("/:userID", a.handler.UpdateUserData)
+		}
 		pet := api.Group("pet")
 		{
 			image := pet.Group("/image") //Работа с изображениями минио хранилища

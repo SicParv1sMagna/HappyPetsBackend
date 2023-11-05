@@ -10,7 +10,16 @@ type User struct {
 	RepeatPassword string `json:"repeat_password"`
 }
 
-type LoginUserRequest struct {
+type UserLoginRequest struct {
 	PhoneNumber string `json:"phone_number"`
 	Password    string `json:"password"`
+}
+
+type UserUpdateRequest struct {
+	FirstName      string
+	LastName       string
+	Email          string
+	PhoneNumber    string
+	Password       string
+	RepeatPassword string
 }
