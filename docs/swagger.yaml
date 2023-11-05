@@ -66,31 +66,6 @@ definitions:
       message:
         type: string
     type: object
-  model.UpdatePetRequest:
-    properties:
-      birthdate:
-        type: string
-      color:
-        type: string
-      description:
-        type: string
-      food:
-        type: string
-      gender:
-        type: string
-      id:
-        type: integer
-      name:
-        type: string
-      photos:
-        items:
-          type: string
-        type: array
-      spicies:
-        type: string
-      weight:
-        type: number
-    type: object
   model.UploadImageResponse:
     properties:
       imageURL:
@@ -136,6 +111,29 @@ paths:
           schema:
             $ref: '#/definitions/model.Pet'
       summary: Создание нового питомца.
+      tags:
+      - Питомец
+  /api/pet/delete/{petID}:
+    delete:
+      consumes:
+      - application/json
+      description: Удаляет питомца по заданному идентификатору.
+      parameters:
+      - description: ID питомца
+        in: path
+        name: petID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Питомец успешно удален
+        "400":
+          description: Неверный запрос
+        "404":
+          description: Питомец не найден
+      summary: Удаление питомца.
       tags:
       - Питомец
   /api/pet/image/remove/{userID}/{petID}:
@@ -247,37 +245,6 @@ paths:
           description: Неверный запрос
           schema:
             $ref: '#/definitions/model.PetUpdateRequest'
-      summary: Обновление информации о питомце.
-      tags:
-      - Питомец
-  /api/pet/update/{id}:
-    put:
-      consumes:
-      - application/json
-      description: Обновляет информацию о питомце с предоставленными данными.
-      parameters:
-      - description: ID питомца
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: Объект UpdatePetRequest в формате JSON
-        in: body
-        name: pet
-        required: true
-        schema:
-          $ref: '#/definitions/model.UpdatePetRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Питомец успешно обновлен
-          schema:
-            $ref: '#/definitions/model.UpdatePetRequest'
-        "400":
-          description: Неверный запрос
-          schema:
-            $ref: '#/definitions/model.UpdatePetRequest'
       summary: Обновление информации о питомце.
       tags:
       - Питомец

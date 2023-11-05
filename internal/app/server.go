@@ -35,13 +35,14 @@ func (a *Application) StartServer() {
 		}
 		pet := api.Group("pet")
 		{
-			image := pet.Group("/image")//Работа с изображениями минио хранилища
+			image := pet.Group("/image") //Работа с изображениями минио хранилища
 			{
-				image.POST("/upload/:userID/:petID", a.handler.UploadImage) // Метод для загрузки изображения
+				image.POST("/upload/:userID/:petID", a.handler.UploadImage)   // Метод для загрузки изображения
 				image.DELETE("/remove/:userID/:petID", a.handler.RemoveImage) // Метод для удаления изображения
 			}
-			pet.POST("/create", a.handler.CreatePet)//Метод для создания питомца
-			pet.PUT("/update", a.handler.UpdatePet)//Метод для изменения информации питомца
+			pet.POST("/create", a.handler.CreatePet)       	  //Метод для создания питомца
+			pet.PUT("/update/:petID", a.handler.UpdatePet)    //Метод для изменения информации питомца
+			pet.DELETE("/delete/:petID", a.handler.DeletePet) //Метод удаления питомца
 		}
 	}
 

@@ -49,6 +49,41 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/pet/delete/{petID}": {
+            "delete": {
+                "description": "Удаляет питомца по заданному идентификатору.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Питомец"
+                ],
+                "summary": "Удаление питомца.",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID питомца",
+                        "name": "petID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Питомец успешно удален"
+                    },
+                    "400": {
+                        "description": "Неверный запрос"
+                    },
+                    "404": {
+                        "description": "Питомец не найден"
+                    }
+                }
+            }
+        },
         "/api/pet/image/remove/{userID}/{petID}": {
             "delete": {
                 "description": "Удаляет изображение из Minio happypets-image(bucket) определенного домашнего животного, связанного с пользователем.",
@@ -211,53 +246,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/pet/update/{id}": {
-            "put": {
-                "description": "Обновляет информацию о питомце с предоставленными данными.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Питомец"
-                ],
-                "summary": "Обновление информации о питомце.",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "ID питомца",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Объект UpdatePetRequest в формате JSON",
-                        "name": "pet",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.UpdatePetRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Питомец успешно обновлен",
-                        "schema": {
-                            "$ref": "#/definitions/model.UpdatePetRequest"
-                        }
-                    },
-                    "400": {
-                        "description": "Неверный запрос",
-                        "schema": {
-                            "$ref": "#/definitions/model.UpdatePetRequest"
-                        }
-                    }
-                }
-            }
-        },
         "/api/user/register": {
             "post": {
                 "description": "Регистрация нового пользователя с предоставленной информацией.",
@@ -393,44 +381,6 @@ const docTemplate = `{
             "properties": {
                 "message": {
                     "type": "string"
-                }
-            }
-        },
-        "model.UpdatePetRequest": {
-            "type": "object",
-            "properties": {
-                "birthdate": {
-                    "type": "string"
-                },
-                "color": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "food": {
-                    "type": "string"
-                },
-                "gender": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "photos": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "spicies": {
-                    "type": "string"
-                },
-                "weight": {
-                    "type": "number"
                 }
             }
         },
