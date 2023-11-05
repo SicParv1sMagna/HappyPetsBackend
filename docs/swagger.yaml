@@ -66,31 +66,6 @@ definitions:
       message:
         type: string
     type: object
-  model.UpdatePetRequest:
-    properties:
-      birthdate:
-        type: string
-      color:
-        type: string
-      description:
-        type: string
-      food:
-        type: string
-      gender:
-        type: string
-      id:
-        type: integer
-      name:
-        type: string
-      photos:
-        items:
-          type: string
-        type: array
-      spicies:
-        type: string
-      weight:
-        type: number
-    type: object
   model.UploadImageResponse:
     properties:
       imageURL:
@@ -109,6 +84,30 @@ definitions:
       last_name:
         type: string
       password:
+        type: string
+      phone_number:
+        type: string
+      repeat_password:
+        type: string
+    type: object
+  model.UserLoginRequest:
+    properties:
+      password:
+        type: string
+      phone_number:
+        type: string
+    type: object
+  model.UserUpdateRequest:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      password:
+        type: string
+      phone_number:
         type: string
       repeat_password:
         type: string
@@ -219,7 +218,7 @@ paths:
         домашнего животного, связанного с пользователем.
       tags:
       - Изображение
-  /api/pet/update/{id}:
+  /api/pet/update/{petID}:
     put:
       consumes:
       - application/json
@@ -227,7 +226,7 @@ paths:
       parameters:
       - description: ID питомца
         in: path
-        name: id
+        name: petID
         required: true
         type: integer
       - description: Объект PetUpdateRequest в формате JSON
@@ -250,38 +249,7 @@ paths:
       summary: Обновление информации о питомце.
       tags:
       - Питомец
-  /api/pet/update/{id}:
-    put:
-      consumes:
-      - application/json
-      description: Обновляет информацию о питомце с предоставленными данными.
-      parameters:
-      - description: ID питомца
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: Объект UpdatePetRequest в формате JSON
-        in: body
-        name: pet
-        required: true
-        schema:
-          $ref: '#/definitions/model.UpdatePetRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Питомец успешно обновлен
-          schema:
-            $ref: '#/definitions/model.UpdatePetRequest'
-        "400":
-          description: Неверный запрос
-          schema:
-            $ref: '#/definitions/model.UpdatePetRequest'
-      summary: Обновление информации о питомце.
-      tags:
-      - Питомец
-  /api/user/register:
+  /user/register:
     post:
       consumes:
       - application/json
@@ -300,7 +268,114 @@ paths:
           description: Успешно зарегистрированный пользователь
           schema:
             $ref: '#/definitions/model.User'
-      summary: Register a new user
+      summary: Регистрация нового пользователя.
       tags:
-      - User
+      - Пользователь
+  /api/login:
+    post:
+      consumes:
+      - application/json
+      description: Авторизация пользователя и генерация JWT-токена
+      parameters:
+      - description: Данные для входа
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserLoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешный ответ
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Неверный запрос
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Вход пользователя
+      tags:
+      - Пользователь
+  /users/{userID}:
+    get:
+      description: Получение данных пользователя по его идентификатору
+      parameters:
+      - description: Идентификатор пользователя
+        in: path
+        name: userID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешный ответ
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Неверный запрос
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Получить пользователя по идентификатору
+      tags:
+      - Пользователь
+    put:
+      consumes:
+      - application/json
+      description: Обновление данных пользователя по его идентификатору
+      parameters:
+      - description: Идентификатор пользователя
+        in: path
+        name: userID
+        required: true
+        type: integer
+      - description: Данные для обновления
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешный ответ
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Неверный запрос
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Обновить данные пользователя
+      tags:
+      - Пользователь
 swagger: "2.0"

@@ -107,7 +107,7 @@ func (uc *UseCase) GetUserById(userID uint) (model.User, error) {
 	return user, nil
 }
 
-func (uc *UseCase) LoginUser(userJSON model.LoginUserRequest) (string, error) {
+func (uc *UseCase) LoginUser(userJSON model.UserLoginRequest) (string, error) {
 	if userJSON.PhoneNumber == "" {
 		return "", errors.New("запполните номер телефона")
 	}
@@ -130,5 +130,51 @@ func (uc *UseCase) LoginUser(userJSON model.LoginUserRequest) (string, error) {
 		return "", err
 	}
 
+	err = uc.Repository.SaveJWTToken(uint(candidate.ID), token)
+	if err != nil {
+		return "", err
+	}
+
 	return token, nil
+}
+
+func (uc *UseCase) GetUserById(id uint) (model.User, error) {
+	if id <= 0 {
+		return model.User{}, errors.New("id не может быть меньше одного")
+	}
+
+	user, err := uc.Repository.GetUserById(id)
+	if err != nil {
+		return model.User{}, err
+	}
+
+	return user, nil
+}
+
+func (uc *UseCase) UpdateUserData(updatedUser model.UserUpdateRequest, userID uint) (model.User, error) {
+	if userID <= 0 {
+		return model.User{}, errors.New("id не может быть отрицательным")
+	}
+
+	if updatedUser.Password != updatedUser.RepeatPassword {
+		return model.User{}, errors.New("введенные пароли не совпадают")
+	}
+
+	candidate, err := uc.Repository.GetUserById(userID)
+	if err != nil {
+		return model.User{}, err
+	}
+
+	candidate.FirstName = updatedUser.FirstName
+	candidate.LastName = updatedUser.LastName
+	candidate.Email = updatedUser.Email
+	candidate.PhoneNumber = updatedUser.PhoneNumber
+	candidate.Password = updatedUser.Password
+
+	err = uc.Repository.UpdateUser(candidate)
+	if err != nil {
+		return model.User{}, err
+	}
+
+	return candidate, nil
 }

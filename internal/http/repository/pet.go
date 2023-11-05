@@ -11,7 +11,7 @@ type PetRepository interface {
 	CreatePet(pet model.Pet) error
 	GetPetById(id uint) error
 	DeletePet(id uint) error
-	UpdatePet(pet model.Pet) error
+	UpdatePet(pet model.PetUpdateRequest) error
 }
 
 func (r *Repository) CreatePet(pet model.Pet) error {
@@ -42,11 +42,4 @@ func (r *Repository) GetPetById(petID uint) (model.Pet, error) {
 		return model.Pet{}, fmt.Errorf("ошибка при получении питомца из БД: %v", err)
 	}
 	return pet, nil
-}
-
-func (r *Repository) UpdatePet(pet model.UpdatePetRequest) error {
-	if err := r.db.Model(&model.Pet{}).Where("id = ?", pet.ID).Updates(pet).Error; err != nil {
-		return fmt.Errorf("ошибка при обновлении информации о питомце в БД: %v", err)
-	}
-	return nil
 }

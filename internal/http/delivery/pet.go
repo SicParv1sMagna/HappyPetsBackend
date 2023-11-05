@@ -8,7 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// @BasePath /api/pet/create
 // @Summary Создание нового питомца.
 // @Description Создайте нового питомца с предоставленной информацией.
 // @Tags Питомец
