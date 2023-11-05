@@ -11,6 +11,7 @@ type UserUseCase interface {
 	RegisterUser(userJSON model.User) (model.User, error)
 	LoginUser(userJSON model.User) (model.User, error)
 	GetUserById(user uint) (model.User, error)
+	UpdateUserData(updatedUser model.UserUpdateRequest, userID uint) (model.User, error)
 }
 
 func (uc *UseCase) RegisterUser(userJSON model.User) (model.User, error) {
@@ -60,46 +61,7 @@ func (uc *UseCase) RegisterUser(userJSON model.User) (model.User, error) {
 		Password:    userJSON.Password,
 	}
 
-	err := uc.Repository.CreateUser(user)
-	if err != nil {
-		return model.User{}, err
-	}
-
-	return user, nil
-}
-
-func (uc *UseCase) LoginUser(userJSON model.UserLoginRequest) (string, error) {
-	if userJSON.PhoneNumber == "" {
-		return "", errors.New("запполните номер телефона")
-	}
-
-	if userJSON.Password == "" {
-		return "", errors.New("заполните пароль")
-	}
-
-	candidate, err := uc.Repository.GetByPhoneNumber(userJSON.PhoneNumber)
-	if err != nil {
-		return "", err
-	}
-
-	if ok := middleware.CheckPasswordHash(userJSON.Password, candidate.Password); !ok {
-		return "", errors.New("пароли не совпадают")
-	}
-
-	token, err := middleware.GenerateJWTToken(uint(candidate.ID))
-	if err != nil {
-		return "", err
-	}
-
-	return token, nil
-}
-
-func (uc *UseCase) GetUserById(userID uint) (model.User, error) {
-	if userID < 1 {
-		return model.User{}, errors.New("id не может быть отрицательным")
-	}
-
-	user, err := uc.Repository.GetUserById(userID)
+	err = uc.Repository.CreateUser(user)
 	if err != nil {
 		return model.User{}, err
 	}
@@ -138,12 +100,12 @@ func (uc *UseCase) LoginUser(userJSON model.UserLoginRequest) (string, error) {
 	return token, nil
 }
 
-func (uc *UseCase) GetUserById(id uint) (model.User, error) {
-	if id <= 0 {
-		return model.User{}, errors.New("id не может быть меньше одного")
+func (uc *UseCase) GetUserById(userID uint) (model.User, error) {
+	if userID < 1 {
+		return model.User{}, errors.New("id не может быть отрицательным")
 	}
 
-	user, err := uc.Repository.GetUserById(id)
+	user, err := uc.Repository.GetUserById(userID)
 	if err != nil {
 		return model.User{}, err
 	}
