@@ -137,6 +137,29 @@ paths:
       summary: Создание нового питомца.
       tags:
       - Питомец
+  /api/pet/delete/{petID}:
+    delete:
+      consumes:
+      - application/json
+      description: Удаляет питомца по заданному идентификатору.
+      parameters:
+      - description: ID питомца
+        in: path
+        name: petID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Питомец успешно удален
+        "400":
+          description: Неверный запрос
+        "404":
+          description: Питомец не найден
+      summary: Удаление питомца.
+      tags:
+      - Питомец
   /api/pet/image/remove/{userID}/{petID}:
     delete:
       consumes:
@@ -218,7 +241,7 @@ paths:
         домашнего животного, связанного с пользователем.
       tags:
       - Изображение
-  /api/pet/update/{petID}:
+  /api/pet/update/{id}:
     put:
       consumes:
       - application/json
@@ -226,7 +249,7 @@ paths:
       parameters:
       - description: ID питомца
         in: path
-        name: petID
+        name: id
         required: true
         type: integer
       - description: Объект PetUpdateRequest в формате JSON
@@ -249,7 +272,7 @@ paths:
       summary: Обновление информации о питомце.
       tags:
       - Питомец
-  /user/register:
+  /api/user/register:
     post:
       consumes:
       - application/json
@@ -271,7 +294,7 @@ paths:
       summary: Регистрация нового пользователя.
       tags:
       - Пользователь
-  /api/login:
+  /login:
     post:
       consumes:
       - application/json
@@ -337,8 +360,6 @@ paths:
               type: string
             type: object
       summary: Получить пользователя по идентификатору
-      tags:
-      - Пользователь
     put:
       consumes:
       - application/json
@@ -376,6 +397,4 @@ paths:
               type: string
             type: object
       summary: Обновить данные пользователя
-      tags:
-      - Пользователь
 swagger: "2.0"

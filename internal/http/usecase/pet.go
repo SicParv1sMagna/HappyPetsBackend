@@ -9,6 +9,7 @@ import (
 type PetUseCase interface {
 	CreatePet(pet model.Pet) (model.Pet, error)
 	UpdatePet(pet model.Pet) (model.Pet, error)
+	DeletePet(petID uint) (error)
 }
 
 func (uc *UseCase) CreatePet(pet model.Pet) (model.Pet, error) {
@@ -46,3 +47,19 @@ func (uc *UseCase) UpdatePet(pet model.PetUpdateRequest) (model.PetUpdateRequest
 
 	return pet, nil
 }
+
+func (uc *UseCase) DeletePet(petID uint) error {
+	if petID == 0 {
+		return errors.New("неверный идентификатор питомца")
+	}
+
+	// Другие проверки на валидность полей животного добавим позже
+	
+	err := uc.Repository.DeletePet(petID)
+	if err != nil {
+		return errors.New("ошибка при удалении питомца")
+	}
+
+	return nil
+}
+

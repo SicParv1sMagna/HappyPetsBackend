@@ -43,7 +43,7 @@ func (h *Handler) CreatePet(ctx *gin.Context) {
 // @Failure 400 {object} model.PetUpdateRequest "Неверный запрос"
 // @Router /api/pet/update/{id} [put]
 func (h *Handler) UpdatePet(ctx *gin.Context) {
-	pet_id, err := strconv.ParseUint(ctx.Param("petID"), 10, 64)
+	petID, err := strconv.ParseUint(ctx.Param("petID"), 10, 64)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "неверный ID питомца"})
 		return
@@ -55,7 +55,7 @@ func (h *Handler) UpdatePet(ctx *gin.Context) {
 		return
 	}
 
-	petJSON.ID = pet_id
+	petJSON.ID = petID
 	pet, err := h.UseCase.UpdatePet(petJSON)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "ошибка при обновлении питомца"})
@@ -63,4 +63,30 @@ func (h *Handler) UpdatePet(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"pet": pet, "message": "Питомец успешно обновлен"})
+}
+
+// @Summary Удаление питомца.
+// @Description Удаляет питомца по заданному идентификатору.
+// @Tags Питомец
+// @Accept json
+// @Produce json
+// @Param petID path integer true "ID питомца"
+// @Success 204 "Питомец успешно удален"
+// @Failure 400 "Неверный запрос"
+// @Failure 404 "Питомец не найден"
+// @Router /api/pet/delete/{petID} [delete]
+func (h *Handler) DeletePet(ctx *gin.Context) {
+	petID, err := strconv.ParseUint(ctx.Param("petID"), 10, 64)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "неверный ID питомца"})
+		return
+	}
+
+	err = h.UseCase.DeletePet(uint(petID))
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "питомец не найден"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "Питомец успешно удален"})
 }

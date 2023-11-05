@@ -4,6 +4,9 @@ import (
 	"time"
 )
 
+const PET_STATUS_ACTIVE = "активный"
+const PET_STATUS_DELETED = "удален"
+
 type Pet struct {
 	ID          uint64    `json:"id" gorm:"primaryKey"`
 	Name        string    `json:"name"`

@@ -49,6 +49,41 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/pet/delete/{petID}": {
+            "delete": {
+                "description": "Удаляет питомца по заданному идентификатору.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Питомец"
+                ],
+                "summary": "Удаление питомца.",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID питомца",
+                        "name": "petID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Питомец успешно удален"
+                    },
+                    "400": {
+                        "description": "Неверный запрос"
+                    },
+                    "404": {
+                        "description": "Питомец не найден"
+                    }
+                }
+            }
+        },
         "/api/pet/image/remove/{userID}/{petID}": {
             "delete": {
                 "description": "Удаляет изображение из Minio happypets-image(bucket) определенного домашнего животного, связанного с пользователем.",
@@ -164,7 +199,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/pet/update/{petID}": {
+        "/api/pet/update/{id}": {
             "put": {
                 "description": "Обновляет информацию о питомце с предоставленными данными.",
                 "consumes": [
@@ -181,7 +216,7 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "description": "ID питомца",
-                        "name": "petID",
+                        "name": "id",
                         "in": "path",
                         "required": true
                     },
@@ -211,7 +246,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/register": {
+        "/api/user/register": {
             "post": {
                 "description": "Регистрация нового пользователя с предоставленной информацией.",
                 "consumes": [
@@ -245,7 +280,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/login": {
+        "/login": {
             "post": {
                 "description": "Авторизация пользователя и генерация JWT-токена",
                 "consumes": [
@@ -306,9 +341,6 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
-                "tags": [
-                    "Пользователь"
-                ],
                 "summary": "Получить пользователя по идентификатору",
                 "parameters": [
                     {
@@ -354,9 +386,6 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
-                ],
-                "tags": [
-                    "Пользователь"
                 ],
                 "summary": "Обновить данные пользователя",
                 "parameters": [
