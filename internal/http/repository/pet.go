@@ -8,9 +8,9 @@ import (
 
 type PetRepository interface {
 	CreatePet(pet model.Pet) error
-	GetPetById(id uint) error
-	DeletePet(id uint) error
-	UpdatePet(pet model.PetUpdateRequest) error
+	GetPetById(petID uint) error
+	DeletePet(petID uint) error
+	UpdatePet(pet model.Pet) error
 }
 
 func (r *Repository) CreatePet(pet model.Pet) error {
@@ -32,5 +32,19 @@ func (r *Repository) UpdatePet(pet model.PetUpdateRequest) error {
 	if err := r.db.Model(&model.Pet{}).Where("id = ?", pet.ID).Updates(pet).Error; err != nil {
 		return errors.New("ошибка при обновлении информации о питомце в БД")
 	}
+	return nil
+}
+
+func (r *Repository) DeletePet(petID uint) error {
+	pet := &model.Pet{}
+	if err := r.db.Where("id = ?", petID).First(pet).Error; err != nil {
+		return errors.New("питомец не найден")
+	}
+
+	pet.Status = model.PET_STATUS_DELETED
+	if err := r.db.Save(pet).Error; err != nil {
+		return errors.New("ошибка при обновлении статуса питомца в БД")
+	}
+
 	return nil
 }
