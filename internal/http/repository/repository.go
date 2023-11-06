@@ -48,3 +48,7 @@ func New(dsn string) (*Repository, error) {
 		rd: redis_client,
 	}, nil
 }
+
+func (r *Repository) GetRedisClient() *redis.Client {
+	return r.rd
+}

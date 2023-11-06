@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/SicParv1sMagna/HappyPetsBackend/docs"
+	"github.com/SicParv1sMagna/HappyPetsBackend/internal/pkg/middleware"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"     // swagger embed files
@@ -41,6 +42,8 @@ func (a *Application) StartServer() {
 
 	api := router.Group("/api")
 	{
+		api.Use(middleware.Authenticated(a.repository.GetRedisClient(), []byte("SuperSecretKey")))
+
 		user = api.Group("/user")
 		{
 			user.GET("/:userID", a.handler.GetUserById)
