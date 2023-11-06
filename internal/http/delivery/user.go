@@ -2,7 +2,6 @@ package delivery
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/SicParv1sMagna/HappyPetsBackend/internal/model"
 	"github.com/gin-gonic/gin"
@@ -70,9 +69,16 @@ func (h *Handler) Login(ctx *gin.Context) {
 // @Failure 500 {object} map[string]string "Внутренняя ошибка сервера"
 // @Router /users/{userID} [get]
 func (h *Handler) GetUserById(ctx *gin.Context) {
-	userID, err := strconv.Atoi(ctx.Param("userID"))
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	ctxUserID, exists := ctx.Get("userID")
+	if !exists {
+		// Если значение отсутствует в контексте, обработайте эту ситуацию
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Идентификатор пользователя отсутствует в контексте"})
+		return
+	}
+
+	userID, ok := ctxUserID.(int)
+	if !ok {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Ошибка при преобразовании идентификатора пользователя"})
 		return
 	}
 
@@ -97,14 +103,21 @@ func (h *Handler) GetUserById(ctx *gin.Context) {
 // @Failure 500 {object} map[string]string "Внутренняя ошибка сервера"
 // @Router /users/{userID} [put]
 func (h *Handler) UpdateUserData(ctx *gin.Context) {
-	userID, err := strconv.Atoi(ctx.Param("userID"))
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	ctxUserID, exists := ctx.Get("userID")
+	if !exists {
+		// Если значение отсутствует в контексте, обработайте эту ситуацию
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Идентификатор пользователя отсутствует в контексте"})
+		return
+	}
+
+	userID, ok := ctxUserID.(uint)
+	if !ok {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Ошибка при преобразовании идентификатора пользователя"})
 		return
 	}
 
 	var userJSON model.UserUpdateRequest
-	if err = ctx.ShouldBindJSON(&userJSON); err != nil {
+	if err := ctx.ShouldBindJSON(&userJSON); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

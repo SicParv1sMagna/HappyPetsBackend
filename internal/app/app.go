@@ -1,8 +1,6 @@
 package app
 
 import (
-	"fmt"
-
 	"github.com/SicParv1sMagna/HappyPetsBackend/internal/dsn"
 	"github.com/SicParv1sMagna/HappyPetsBackend/internal/http/delivery"
 	"github.com/SicParv1sMagna/HappyPetsBackend/internal/http/repository"
@@ -24,7 +22,6 @@ func New() (Application, error) {
 	h := delivery.NewHandler(uc)
 
 	if err != nil {
-		fmt.Println(err)
 		return Application{}, err
 	}
 

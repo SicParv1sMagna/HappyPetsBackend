@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/go-redis/redis"
@@ -32,7 +31,6 @@ func New(dsn string) (*Repository, error) {
 	})
 
 	if err != nil {
-		fmt.Println("ОШИБКА В МИНИО")
 		return nil, err
 	}
 

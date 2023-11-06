@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -11,12 +10,11 @@ import (
 )
 
 func Authenticated(redisClient *redis.Client, jwtSecretKey []byte) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		fmt.Println(redisClient)
-		tokenString := c.GetHeader("Authorization")
+	return func(ctx *gin.Context) {
+		tokenString := ctx.GetHeader("Authorization")
 		if tokenString == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Для продолжения необходимо авторизоваться"})
-			c.Abort()
+			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Для продолжения необходимо авторизоваться"})
+			ctx.Abort()
 			return
 		}
 
@@ -24,27 +22,24 @@ func Authenticated(redisClient *redis.Client, jwtSecretKey []byte) gin.HandlerFu
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 			return jwtSecretKey, nil
 		})
-		fmt.Println(token)
 		if err != nil || !token.Valid {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Недействительный токен"})
-			c.Abort()
+			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Недействительный токен"})
+			ctx.Abort()
 			return
 		}
 
 		claims, ok := token.Claims.(jwt.MapClaims)
-		fmt.Println(claims)
 		if !ok {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Неверный формат токена"})
-			c.Abort()
+			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Неверный формат токена"})
+			ctx.Abort()
 			return
 		}
 
 		// Получение идентификатора пользователя из токена
 		subClaim, ok := claims["userID"].(float64)
-		fmt.Println(subClaim)
 		if !ok {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Неверный формат токена"})
-			c.Abort()
+			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Неверный формат токена"})
+			ctx.Abort()
 			return
 		}
 
@@ -53,11 +48,12 @@ func Authenticated(redisClient *redis.Client, jwtSecretKey []byte) gin.HandlerFu
 		// Проверка, существует ли токен в Redis
 		tokenValue, err := redisClient.Get(strconv.Itoa(userID)).Result()
 		if err != nil || tokenValue != tokenString {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Токен не действителен"})
-			c.Abort()
+			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Токен не действителен"})
+			ctx.Abort()
 			return
 		}
 
-		c.Set("userID", userID) // Сохранение идентификатора пользователя в контексте Gin
+		ctx.Set("userID", userID) // Сохранение идентификатора пользователя в контексте Gin
+		ctx.Next()
 	}
 }
