@@ -1,11 +1,61 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "API server for Native HappyPets application",
+        "title": "HappyPets RestAPI",
+        "contact": {},
+        "version": "1.0"
     },
+    "host": "http://localhost:8080",
+    "basePath": "/",
     "paths": {
+        "/api/pet/": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Возвращает список всех питомцев пользователя.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Питомец"
+                ],
+                "summary": "Получение списка всех питомцев пользователя.",
+                "responses": {
+                    "200": {
+                        "description": "Список питомцев пользователя",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Pet"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Pet"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/pet/create": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Создайте нового питомца с предоставленной информацией.",
                 "consumes": [
                     "application/json"
@@ -19,12 +69,12 @@
                 "summary": "Создание нового питомца.",
                 "parameters": [
                     {
-                        "description": "Объект Pet в формате JSON",
+                        "description": "Объект PetCreateRequest в формате JSON",
                         "name": "pet",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.Pet"
+                            "$ref": "#/definitions/model.PetCreateRequest"
                         }
                     }
                 ],
@@ -40,6 +90,11 @@
         },
         "/api/pet/delete/{petID}": {
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Удаляет питомца по заданному идентификатору.",
                 "consumes": [
                     "application/json"
@@ -73,8 +128,13 @@
                 }
             }
         },
-        "/api/pet/image/remove/{userID}/{petID}": {
+        "/api/pet/image/remove/{petID}": {
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Удаляет изображение из Minio happypets-image(bucket) определенного домашнего животного, связанного с пользователем.",
                 "consumes": [
                     "application/json"
@@ -83,17 +143,10 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Изображение"
+                    "Питомец"
                 ],
                 "summary": "Удаляет изображение из Minio happypets-image(bucket) определенного домашнего животного, связанного с пользователем.",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "userID",
-                        "in": "path",
-                        "required": true
-                    },
                     {
                         "type": "string",
                         "description": "Pet ID",
@@ -130,8 +183,13 @@
                 }
             }
         },
-        "/api/pet/image/upload/{userID}/{petID}": {
+        "/api/pet/image/upload/{petID}": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Загружает изображение в Minio happypets-image(bucket) определенного домашнего животного, связанного с пользователем.",
                 "consumes": [
                     "multipart/form-data"
@@ -140,17 +198,10 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Изображение"
+                    "Питомец"
                 ],
                 "summary": "Загружает изображение в Minio happypets-image(bucket) определенного домашнего животного, связанного с пользователем.",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "userID",
-                        "in": "path",
-                        "required": true
-                    },
                     {
                         "type": "string",
                         "description": "Pet ID",
@@ -188,8 +239,13 @@
                 }
             }
         },
-        "/api/pet/update/{id}": {
+        "/api/pet/update/{petID}": {
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Обновляет информацию о питомце с предоставленными данными.",
                 "consumes": [
                     "application/json"
@@ -223,21 +279,26 @@
                     "200": {
                         "description": "Питомец успешно обновлен",
                         "schema": {
-                            "$ref": "#/definitions/model.PetUpdateRequest"
+                            "$ref": "#/definitions/model.Pet"
                         }
                     },
                     "400": {
                         "description": "Неверный запрос",
                         "schema": {
-                            "$ref": "#/definitions/model.PetUpdateRequest"
+                            "$ref": "#/definitions/model.Pet"
                         }
                     }
                 }
             }
         },
-        "/api/user/register": {
-            "post": {
-                "description": "Регистрация нового пользователя с предоставленной информацией.",
+        "/api/pet/{petID}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Возвращает информацию о питомце по его ID.",
                 "consumes": [
                     "application/json"
                 ],
@@ -245,31 +306,47 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Пользователь"
+                    "Питомец"
                 ],
-                "summary": "Регистрация нового пользователя.",
+                "summary": "Получение информации о питомце по его ID.",
                 "parameters": [
                     {
-                        "description": "Пользовательский объект в формате JSON",
-                        "name": "user",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.User"
-                        }
+                        "type": "integer",
+                        "description": "ID питомца",
+                        "name": "petID",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
-                    "201": {
-                        "description": "Успешно зарегистрированный пользователь",
+                    "200": {
+                        "description": "Информация о питомце",
                         "schema": {
-                            "$ref": "#/definitions/model.User"
+                            "$ref": "#/definitions/model.Pet"
+                        }
+                    },
+                    "400": {
+                        "description": "Неверный запрос",
+                        "schema": {
+                            "$ref": "#/definitions/model.Pet"
+                        }
+                    },
+                    "404": {
+                        "description": "Питомец не найден",
+                        "schema": {
+                            "$ref": "#/definitions/model.Pet"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "$ref": "#/definitions/model.Pet"
                         }
                     }
                 }
             }
         },
-        "/login": {
+        "/user/login": {
             "post": {
                 "description": "Авторизация пользователя и генерация JWT-токена",
                 "consumes": [
@@ -319,6 +396,40 @@
                             "additionalProperties": {
                                 "type": "string"
                             }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/register": {
+            "post": {
+                "description": "Регистрация нового пользователя с предоставленной информацией.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Пользователь"
+                ],
+                "summary": "Регистрация нового пользователя.",
+                "parameters": [
+                    {
+                        "description": "Пользовательский объект в формате JSON",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Успешно зарегистрированный пользователь",
+                        "schema": {
+                            "$ref": "#/definitions/model.User"
                         }
                     }
                 }
@@ -429,7 +540,10 @@
         "model.Pet": {
             "type": "object",
             "properties": {
-                "birthdate": {
+                "age": {
+                    "type": "integer"
+                },
+                "birthday": {
                     "type": "string"
                 },
                 "breed_id": {
@@ -438,10 +552,7 @@
                 "color": {
                     "type": "string"
                 },
-                "created_at": {
-                    "type": "string"
-                },
-                "description": {
+                "creation_date": {
                     "type": "string"
                 },
                 "food": {
@@ -456,17 +567,14 @@
                 "lives_at": {
                     "type": "string"
                 },
+                "lost": {
+                    "type": "boolean"
+                },
                 "name": {
                     "type": "string"
                 },
-                "passport_id": {
-                    "type": "integer"
-                },
-                "photos": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
+                "photo": {
+                    "type": "string"
                 },
                 "spicies": {
                     "type": "string"
@@ -474,8 +582,37 @@
                 "status": {
                     "type": "string"
                 },
-                "todo_id": {
+                "weight": {
+                    "type": "number"
+                }
+            }
+        },
+        "model.PetCreateRequest": {
+            "type": "object",
+            "properties": {
+                "age": {
                     "type": "integer"
+                },
+                "birthday": {
+                    "type": "string"
+                },
+                "color": {
+                    "type": "string"
+                },
+                "food": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "lives_at": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "spicies": {
+                    "type": "string"
                 },
                 "weight": {
                     "type": "number"
@@ -485,13 +622,13 @@
         "model.PetUpdateRequest": {
             "type": "object",
             "properties": {
-                "birthdate": {
+                "age": {
+                    "type": "integer"
+                },
+                "birthday": {
                     "type": "string"
                 },
                 "color": {
-                    "type": "string"
-                },
-                "description": {
                     "type": "string"
                 },
                 "food": {
@@ -500,17 +637,14 @@
                 "gender": {
                     "type": "string"
                 },
-                "id": {
-                    "type": "integer"
+                "lives_at": {
+                    "type": "string"
+                },
+                "lost": {
+                    "type": "boolean"
                 },
                 "name": {
                     "type": "string"
-                },
-                "photos": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
                 },
                 "spicies": {
                     "type": "string"
@@ -598,6 +732,13 @@
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }

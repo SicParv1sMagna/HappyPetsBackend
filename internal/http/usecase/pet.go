@@ -7,57 +7,92 @@ import (
 )
 
 type PetUseCase interface {
-	CreatePet(pet model.Pet) (model.Pet, error)
-	UpdatePet(pet model.Pet) (model.Pet, error)
-	DeletePet(petID uint) (error)
+	CreatePet(userID uint64, requestPet model.PetCreateRequest) (model.Pet, error)
+	GetAllPets(userID uint64) ([]model.Pet, error)
+	GetPetById(userID, petID uint64) (model.Pet, error)
+	UpdatePet(userID, petID uint64, pet model.PetUpdateRequest) (model.Pet, error)
+	DeletePet(userID, petID uint64) error
 }
 
-func (uc *UseCase) CreatePet(pet model.Pet) (model.Pet, error) {
-	if pet.Name == "" {
+func (uc *UseCase) CreatePet(userID uint64, requestPet model.PetCreateRequest) (model.Pet, error) {
+	if requestPet.Name == "" {
 		return model.Pet{}, errors.New("название должно быть заполнено")
 	}
-
-	if pet.Birthdate == "" {
+	if requestPet.Birthday.IsZero() {
 		return model.Pet{}, errors.New("дата рождения должна быть заполнена")
 	}
-	if pet.Spicies == "" {
+	if requestPet.Spicies == "" {
 		return model.Pet{}, errors.New("вид животного должен быть заполнен")
 	}
+	if requestPet.Gender == "" {
+		return model.Pet{}, errors.New("пол животного должен быть заполнен")
+	}
 	// Другие проверки на валидность полей животного добавим позже
 
-	err := uc.Repository.CreatePet(pet)
-	if err != nil {
-		return model.Pet{}, errors.New("ошибка при создании питомца")
+	pet := model.Pet{
+		Name:     requestPet.Name,
+		Birthday: requestPet.Birthday,
+		Spicies:  requestPet.Spicies,
+		Age:      requestPet.Age,
+		Gender:   requestPet.Gender,
+		Color:    requestPet.Color,
+		Weight:   requestPet.Weight,
+		Food:     requestPet.Food,
+		LivesAt:  requestPet.LivesAt,
+		Status:   model.PET_STATUS_ACTIVE,
 	}
 
+	createdPet, err := uc.Repository.CreatePet(userID, pet)
+	if err != nil {
+		return model.Pet{}, err
+	}
+
+	return createdPet, nil
+}
+
+func (uc *UseCase) GetAllPets(userID uint64) ([]model.Pet, error) {
+	pets, err := uc.Repository.GetAllPets(userID)
+	if err != nil {
+		return nil, err
+	}
+	return pets, nil
+}
+
+func (uc *UseCase) GetPetById(userID, petID uint64) (model.Pet, error) {
+	pet, err := uc.Repository.GetPetById(userID, petID)
+	if err != nil {
+		return model.Pet{}, err
+	}
 	return pet, nil
 }
 
-func (uc *UseCase) UpdatePet(pet model.PetUpdateRequest) (model.PetUpdateRequest, error) {
-	if pet.ID == 0 {
-		return model.PetUpdateRequest{}, errors.New("неверный идентификатор питомца")
+func (uc *UseCase) UpdatePet(userID, petID uint64, pet model.PetUpdateRequest) (model.Pet, error) {	
+	if petID == 0 {
+		return model.Pet{}, errors.New("неверный идентификатор питомца")
 	}
-
 	// Другие проверки на валидность полей животного добавим позже
 
-	err := uc.Repository.UpdatePet(pet)
+	updatedPet, err := uc.Repository.UpdatePet(userID, petID, pet)
 	if err != nil {
-		return model.PetUpdateRequest{}, errors.New("ошибка при обновлении информации о питомце")
+		return model.Pet{}, err
 	}
 
-	return pet, nil
+	return updatedPet, nil
 }
 
-func (uc *UseCase) DeletePet(petID uint) error {
+func (uc *UseCase) DeletePet(userID, petID uint64) error {
 	if petID == 0 {
 		return errors.New("неверный идентификатор питомца")
 	}
-
-	// Другие проверки на валидность полей животного добавим позже
 	
-	err := uc.Repository.DeletePet(petID)
+	err := uc.Repository.RemoveServiceImage(userID, petID)
 	if err != nil {
-		return errors.New("ошибка при удалении питомца")
+		return err
+	}
+
+	err = uc.Repository.DeletePet(userID, petID)
+	if err != nil {
+		return err
 	}
 
 	return nil

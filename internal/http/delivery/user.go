@@ -15,7 +15,7 @@ import (
 // @Produce json
 // @Param user body model.User true "Пользовательский объект в формате JSON"
 // @Success 201 {object} model.User "Успешно зарегистрированный пользователь"
-// @Router /api/user/register [post]
+// @Router /user/register [post]
 func (h *Handler) Register(ctx *gin.Context) {
 	var userJSON model.User
 	if err := ctx.ShouldBindJSON(&userJSON); err != nil {
@@ -42,7 +42,7 @@ func (h *Handler) Register(ctx *gin.Context) {
 // @Success 200 {object} map[string]string "Успешный ответ"
 // @Failure 400 {object} map[string]string "Неверный запрос"
 // @Failure 500 {object} map[string]string "Внутренняя ошибка сервера"
-// @Router /login [post]
+// @Router /user/login [post]
 func (h *Handler) Login(ctx *gin.Context) {
 	var userJSON model.UserLoginRequest
 	if err := ctx.ShouldBindJSON(&userJSON); err != nil {

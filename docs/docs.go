@@ -15,8 +15,53 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/pet/": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Возвращает список всех питомцев пользователя.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Питомец"
+                ],
+                "summary": "Получение списка всех питомцев пользователя.",
+                "responses": {
+                    "200": {
+                        "description": "Список питомцев пользователя",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Pet"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Pet"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/pet/create": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Создайте нового питомца с предоставленной информацией.",
                 "consumes": [
                     "application/json"
@@ -30,12 +75,12 @@ const docTemplate = `{
                 "summary": "Создание нового питомца.",
                 "parameters": [
                     {
-                        "description": "Объект Pet в формате JSON",
+                        "description": "Объект PetCreateRequest в формате JSON",
                         "name": "pet",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.Pet"
+                            "$ref": "#/definitions/model.PetCreateRequest"
                         }
                     }
                 ],
@@ -51,6 +96,11 @@ const docTemplate = `{
         },
         "/api/pet/delete/{petID}": {
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Удаляет питомца по заданному идентификатору.",
                 "consumes": [
                     "application/json"
@@ -84,8 +134,13 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/pet/image/remove/{userID}/{petID}": {
+        "/api/pet/image/remove/{petID}": {
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Удаляет изображение из Minio happypets-image(bucket) определенного домашнего животного, связанного с пользователем.",
                 "consumes": [
                     "application/json"
@@ -94,17 +149,10 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Изображение"
+                    "Питомец"
                 ],
                 "summary": "Удаляет изображение из Minio happypets-image(bucket) определенного домашнего животного, связанного с пользователем.",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "userID",
-                        "in": "path",
-                        "required": true
-                    },
                     {
                         "type": "string",
                         "description": "Pet ID",
@@ -141,8 +189,13 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/pet/image/upload/{userID}/{petID}": {
+        "/api/pet/image/upload/{petID}": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Загружает изображение в Minio happypets-image(bucket) определенного домашнего животного, связанного с пользователем.",
                 "consumes": [
                     "multipart/form-data"
@@ -151,17 +204,10 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Изображение"
+                    "Питомец"
                 ],
                 "summary": "Загружает изображение в Minio happypets-image(bucket) определенного домашнего животного, связанного с пользователем.",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "userID",
-                        "in": "path",
-                        "required": true
-                    },
                     {
                         "type": "string",
                         "description": "Pet ID",
@@ -199,8 +245,13 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/pet/update/{id}": {
+        "/api/pet/update/{petID}": {
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Обновляет информацию о питомце с предоставленными данными.",
                 "consumes": [
                     "application/json"
@@ -234,21 +285,26 @@ const docTemplate = `{
                     "200": {
                         "description": "Питомец успешно обновлен",
                         "schema": {
-                            "$ref": "#/definitions/model.PetUpdateRequest"
+                            "$ref": "#/definitions/model.Pet"
                         }
                     },
                     "400": {
                         "description": "Неверный запрос",
                         "schema": {
-                            "$ref": "#/definitions/model.PetUpdateRequest"
+                            "$ref": "#/definitions/model.Pet"
                         }
                     }
                 }
             }
         },
-        "/api/user/register": {
-            "post": {
-                "description": "Регистрация нового пользователя с предоставленной информацией.",
+        "/api/pet/{petID}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Возвращает информацию о питомце по его ID.",
                 "consumes": [
                     "application/json"
                 ],
@@ -256,31 +312,47 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Пользователь"
+                    "Питомец"
                 ],
-                "summary": "Регистрация нового пользователя.",
+                "summary": "Получение информации о питомце по его ID.",
                 "parameters": [
                     {
-                        "description": "Пользовательский объект в формате JSON",
-                        "name": "user",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.User"
-                        }
+                        "type": "integer",
+                        "description": "ID питомца",
+                        "name": "petID",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
-                    "201": {
-                        "description": "Успешно зарегистрированный пользователь",
+                    "200": {
+                        "description": "Информация о питомце",
                         "schema": {
-                            "$ref": "#/definitions/model.User"
+                            "$ref": "#/definitions/model.Pet"
+                        }
+                    },
+                    "400": {
+                        "description": "Неверный запрос",
+                        "schema": {
+                            "$ref": "#/definitions/model.Pet"
+                        }
+                    },
+                    "404": {
+                        "description": "Питомец не найден",
+                        "schema": {
+                            "$ref": "#/definitions/model.Pet"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "$ref": "#/definitions/model.Pet"
                         }
                     }
                 }
             }
         },
-        "/login": {
+        "/user/login": {
             "post": {
                 "description": "Авторизация пользователя и генерация JWT-токена",
                 "consumes": [
@@ -330,6 +402,40 @@ const docTemplate = `{
                             "additionalProperties": {
                                 "type": "string"
                             }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/register": {
+            "post": {
+                "description": "Регистрация нового пользователя с предоставленной информацией.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Пользователь"
+                ],
+                "summary": "Регистрация нового пользователя.",
+                "parameters": [
+                    {
+                        "description": "Пользовательский объект в формате JSON",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Успешно зарегистрированный пользователь",
+                        "schema": {
+                            "$ref": "#/definitions/model.User"
                         }
                     }
                 }
@@ -440,7 +546,10 @@ const docTemplate = `{
         "model.Pet": {
             "type": "object",
             "properties": {
-                "birthdate": {
+                "age": {
+                    "type": "integer"
+                },
+                "birthday": {
                     "type": "string"
                 },
                 "breed_id": {
@@ -449,10 +558,7 @@ const docTemplate = `{
                 "color": {
                     "type": "string"
                 },
-                "created_at": {
-                    "type": "string"
-                },
-                "description": {
+                "creation_date": {
                     "type": "string"
                 },
                 "food": {
@@ -467,17 +573,14 @@ const docTemplate = `{
                 "lives_at": {
                     "type": "string"
                 },
+                "lost": {
+                    "type": "boolean"
+                },
                 "name": {
                     "type": "string"
                 },
-                "passport_id": {
-                    "type": "integer"
-                },
-                "photos": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
+                "photo": {
+                    "type": "string"
                 },
                 "spicies": {
                     "type": "string"
@@ -485,8 +588,37 @@ const docTemplate = `{
                 "status": {
                     "type": "string"
                 },
-                "todo_id": {
+                "weight": {
+                    "type": "number"
+                }
+            }
+        },
+        "model.PetCreateRequest": {
+            "type": "object",
+            "properties": {
+                "age": {
                     "type": "integer"
+                },
+                "birthday": {
+                    "type": "string"
+                },
+                "color": {
+                    "type": "string"
+                },
+                "food": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "lives_at": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "spicies": {
+                    "type": "string"
                 },
                 "weight": {
                     "type": "number"
@@ -496,13 +628,13 @@ const docTemplate = `{
         "model.PetUpdateRequest": {
             "type": "object",
             "properties": {
-                "birthdate": {
+                "age": {
+                    "type": "integer"
+                },
+                "birthday": {
                     "type": "string"
                 },
                 "color": {
-                    "type": "string"
-                },
-                "description": {
                     "type": "string"
                 },
                 "food": {
@@ -511,17 +643,14 @@ const docTemplate = `{
                 "gender": {
                     "type": "string"
                 },
-                "id": {
-                    "type": "integer"
+                "lives_at": {
+                    "type": "string"
+                },
+                "lost": {
+                    "type": "boolean"
                 },
                 "name": {
                     "type": "string"
-                },
-                "photos": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
                 },
                 "spicies": {
                     "type": "string"
@@ -610,17 +739,24 @@ const docTemplate = `{
                 }
             }
         }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
     }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
-	Host:             "",
-	BasePath:         "",
+	Version:          "1.0",
+	Host:             "http://localhost:8080",
+	BasePath:         "/",
 	Schemes:          []string{},
-	Title:            "",
-	Description:      "",
+	Title:            "HappyPets RestAPI",
+	Description:      "API server for Native HappyPets application",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

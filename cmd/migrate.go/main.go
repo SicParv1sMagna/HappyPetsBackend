@@ -16,7 +16,7 @@ func main() {
     }
 
     // Явно мигрировать только нужные таблицы
-    err = db.AutoMigrate(&model.Pet{})
+    err = db.AutoMigrate(&model.Pet{}, &model.User{})
     if err != nil {
         panic("cant migrate db")
     }
