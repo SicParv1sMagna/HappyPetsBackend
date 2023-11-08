@@ -10,20 +10,27 @@ import (
 
 // @Summary Загружает изображение в Minio happypets-image(bucket) определенного домашнего животного, связанного с пользователем.
 // @Description Загружает изображение в Minio happypets-image(bucket) определенного домашнего животного, связанного с пользователем.
-// @Tags Изображение
+// @Tags Питомец
 // @Accept mpfd
 // @Produce json
-// @Param userID path string true "User ID"
+// @Security ApiKeyAuth
 // @Param petID path string true "Pet ID"
 // @Param image formData file true "Image file"
 // @Success 200 {object} model.UploadImageResponse "Изображение успешно загружено"
 // @Failure 400 {object} model.UploadImageResponse "Неверный запрос, неверные входные данные"
 // @Failure 500 {object} model.UploadImageResponse "Внутренняя ошибка сервера"
-// @Router /api/pet/image/upload/{userID}/{petID} [post]
+// @Router /api/pet/image/upload/{petID} [post]
 func (h *Handler) UploadImage(ctx *gin.Context) {
-	userID, err := strconv.Atoi(ctx.Param("userID"))
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "неверный ИД пользователя"})
+	ctxUserID, exists := ctx.Get("userID")
+	if !exists {
+		// Если значение отсутствует в контексте, обработайте эту ситуацию
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Идентификатор пользователя отсутствует в контексте"})
+		return
+	}
+
+	userID, ok := ctxUserID.(int)
+	if !ok {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Ошибка при преобразовании идентификатора пользователя"})
 		return
 	}
 	petID, err := strconv.Atoi(ctx.Param("petID"))
@@ -39,7 +46,7 @@ func (h *Handler) UploadImage(ctx *gin.Context) {
 	// Call the use case method to upload the image
 	imageURL, err := h.UseCase.UploadImage(uint64(userID), uint64(petID), image)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "неудалось загрузить изображение"})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -48,22 +55,30 @@ func (h *Handler) UploadImage(ctx *gin.Context) {
 
 // @Summary Удаляет изображение из Minio happypets-image(bucket) определенного домашнего животного, связанного с пользователем.
 // @Description Удаляет изображение из Minio happypets-image(bucket) определенного домашнего животного, связанного с пользователем.
-// @Tags Изображение
+// @Tags Питомец
 // @Accept json
 // @Produce json
-// @Param userID path string true "User ID"
+// @Security ApiKeyAuth
 // @Param petID path string true "Pet ID"
 // @Success 204 {object} model.RemoveImageResponse "Изображение успешно удалено"
 // @Failure 400 {object} model.RemoveImageResponse "Неверный запрос, неверные входные данные"
 // @Failure 404 {object} model.RemoveImageResponse "Изображение не найдено"
 // @Failure 500 {object} model.RemoveImageResponse "Внутренняя ошибка сервера"
-// @Router /api/pet/image/remove/{userID}/{petID} [delete]
+// @Router /api/pet/image/remove/{petID} [delete]
 func (h *Handler) RemoveImage(ctx *gin.Context) {
-	userID, err := strconv.Atoi(ctx.Param("userID"))
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "неверный ИД питомца"})
+	ctxUserID, exists := ctx.Get("userID")
+	if !exists {
+		// Если значение отсутствует в контексте, обработайте эту ситуацию
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Идентификатор пользователя отсутствует в контексте"})
 		return
 	}
+
+	userID, ok := ctxUserID.(int)
+	if !ok {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Ошибка при преобразовании идентификатора пользователя"})
+		return
+	}
+
 	petID,err := strconv.Atoi(ctx.Param("petID"))
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "неверный ИД питомца"})
@@ -73,9 +88,9 @@ func (h *Handler) RemoveImage(ctx *gin.Context) {
 	// Call the use case method to remove the image
 	err = h.UseCase.RemoveImage(uint64(userID), uint64(petID))
 	if err != nil {
-		ctx.JSON(http.StatusNotFound, gin.H{"error": "изображение с такими ИД не найдено"})
+		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
 
-	ctx.JSON(http.StatusNoContent, model.RemoveImageResponse{Message: "Изображение успешно удалено"})
+	ctx.JSON(http.StatusOK, model.RemoveImageResponse{Message: "Изображение успешно удалено"})
 }

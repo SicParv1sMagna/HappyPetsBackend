@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/SicParv1sMagna/HappyPetsBackend/internal/model"
 	"github.com/minio/minio-go/v7"
 )
 
@@ -31,7 +32,13 @@ func (r *Repository) UploadServiceImage(userID, petID uint64, imageBytes []byte,
 
     // Формирование URL изображения
     imageURL := fmt.Sprintf("http://localhost:9000/happypets-image/%s", objectName)
-    return imageURL, errors.New("ошибка в формировании URL изображения")
+
+    // Обновление поля photo в таблице Pet с новым URL изображения
+    if err := r.db.Table("pet").Where("id = ? AND status = ?", petID, model.PET_STATUS_ACTIVE).Update("photo", imageURL).Error; err != nil {
+        return "", errors.New("ошибка при обновлении URL изображения в базе данных")
+    }
+
+    return imageURL, nil
 }
 
 // RemoveServiceImage удаляет изображение из bucket MinIO.
@@ -41,5 +48,11 @@ func (r *Repository) RemoveServiceImage(userID, petID uint64) error {
     if err != nil {
         return errors.New("ошибка при удалении изображения из минио бакета")
     }
+
+    // Обновление поля photo в таблице Pet на NULL
+    if err := r.db.Table("pet").Where("id = ?", petID).Update("photo", nil).Error; err != nil {
+        return errors.New("ошибка при обновлении URL изображения в базе данных")
+    }
+
     return nil
 }

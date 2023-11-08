@@ -1,15 +1,16 @@
+basePath: /
 definitions:
   model.Pet:
     properties:
-      birthdate:
+      age:
+        type: integer
+      birthday:
         type: string
       breed_id:
         type: integer
       color:
         type: string
-      created_at:
-        type: string
-      description:
+      creation_date:
         type: string
       food:
         type: string
@@ -19,43 +20,58 @@ definitions:
         type: integer
       lives_at:
         type: string
+      lost:
+        type: boolean
       name:
         type: string
-      passport_id:
-        type: integer
-      photos:
-        items:
-          type: string
-        type: array
+      photo:
+        type: string
       spicies:
         type: string
       status:
         type: string
-      todo_id:
-        type: integer
       weight:
         type: number
     type: object
-  model.PetUpdateRequest:
+  model.PetCreateRequest:
     properties:
-      birthdate:
+      age:
+        type: integer
+      birthday:
         type: string
       color:
-        type: string
-      description:
         type: string
       food:
         type: string
       gender:
         type: string
-      id:
-        type: integer
+      lives_at:
+        type: string
       name:
         type: string
-      photos:
-        items:
-          type: string
-        type: array
+      spicies:
+        type: string
+      weight:
+        type: number
+    type: object
+  model.PetUpdateRequest:
+    properties:
+      age:
+        type: integer
+      birthday:
+        type: string
+      color:
+        type: string
+      food:
+        type: string
+      gender:
+        type: string
+      lives_at:
+        type: string
+      lost:
+        type: boolean
+      name:
+        type: string
       spicies:
         type: string
       weight:
@@ -112,21 +128,85 @@ definitions:
       repeat_password:
         type: string
     type: object
+host: http://localhost:8080
 info:
   contact: {}
+  description: API server for Native HappyPets application
+  title: HappyPets RestAPI
+  version: "1.0"
 paths:
+  /api/pet/:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает список всех питомцев пользователя.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Список питомцев пользователя
+          schema:
+            items:
+              $ref: '#/definitions/model.Pet'
+            type: array
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            items:
+              $ref: '#/definitions/model.Pet'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      summary: Получение списка всех питомцев пользователя.
+      tags:
+      - Питомец
+  /api/pet/{petID}:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает информацию о питомце по его ID.
+      parameters:
+      - description: ID питомца
+        in: path
+        name: petID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Информация о питомце
+          schema:
+            $ref: '#/definitions/model.Pet'
+        "400":
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/model.Pet'
+        "404":
+          description: Питомец не найден
+          schema:
+            $ref: '#/definitions/model.Pet'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/model.Pet'
+      security:
+      - ApiKeyAuth: []
+      summary: Получение информации о питомце по его ID.
+      tags:
+      - Питомец
   /api/pet/create:
     post:
       consumes:
       - application/json
       description: Создайте нового питомца с предоставленной информацией.
       parameters:
-      - description: Объект Pet в формате JSON
+      - description: Объект PetCreateRequest в формате JSON
         in: body
         name: pet
         required: true
         schema:
-          $ref: '#/definitions/model.Pet'
+          $ref: '#/definitions/model.PetCreateRequest'
       produces:
       - application/json
       responses:
@@ -134,6 +214,8 @@ paths:
           description: Питомец успешно создан
           schema:
             $ref: '#/definitions/model.Pet'
+      security:
+      - ApiKeyAuth: []
       summary: Создание нового питомца.
       tags:
       - Питомец
@@ -157,21 +239,18 @@ paths:
           description: Неверный запрос
         "404":
           description: Питомец не найден
+      security:
+      - ApiKeyAuth: []
       summary: Удаление питомца.
       tags:
       - Питомец
-  /api/pet/image/remove/{userID}/{petID}:
+  /api/pet/image/remove/{petID}:
     delete:
       consumes:
       - application/json
       description: Удаляет изображение из Minio happypets-image(bucket) определенного
         домашнего животного, связанного с пользователем.
       parameters:
-      - description: User ID
-        in: path
-        name: userID
-        required: true
-        type: string
       - description: Pet ID
         in: path
         name: petID
@@ -196,22 +275,19 @@ paths:
           description: Внутренняя ошибка сервера
           schema:
             $ref: '#/definitions/model.RemoveImageResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Удаляет изображение из Minio happypets-image(bucket) определенного
         домашнего животного, связанного с пользователем.
       tags:
-      - Изображение
-  /api/pet/image/upload/{userID}/{petID}:
+      - Питомец
+  /api/pet/image/upload/{petID}:
     post:
       consumes:
       - multipart/form-data
       description: Загружает изображение в Minio happypets-image(bucket) определенного
         домашнего животного, связанного с пользователем.
       parameters:
-      - description: User ID
-        in: path
-        name: userID
-        required: true
-        type: string
       - description: Pet ID
         in: path
         name: petID
@@ -237,11 +313,13 @@ paths:
           description: Внутренняя ошибка сервера
           schema:
             $ref: '#/definitions/model.UploadImageResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Загружает изображение в Minio happypets-image(bucket) определенного
         домашнего животного, связанного с пользователем.
       tags:
-      - Изображение
-  /api/pet/update/{id}:
+      - Питомец
+  /api/pet/update/{petID}:
     put:
       consumes:
       - application/json
@@ -264,37 +342,17 @@ paths:
         "200":
           description: Питомец успешно обновлен
           schema:
-            $ref: '#/definitions/model.PetUpdateRequest'
+            $ref: '#/definitions/model.Pet'
         "400":
           description: Неверный запрос
           schema:
-            $ref: '#/definitions/model.PetUpdateRequest'
+            $ref: '#/definitions/model.Pet'
+      security:
+      - ApiKeyAuth: []
       summary: Обновление информации о питомце.
       tags:
       - Питомец
-  /api/user/register:
-    post:
-      consumes:
-      - application/json
-      description: Регистрация нового пользователя с предоставленной информацией.
-      parameters:
-      - description: Пользовательский объект в формате JSON
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/model.User'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Успешно зарегистрированный пользователь
-          schema:
-            $ref: '#/definitions/model.User'
-      summary: Регистрация нового пользователя.
-      tags:
-      - Пользователь
-  /login:
+  /user/login:
     post:
       consumes:
       - application/json
@@ -328,6 +386,28 @@ paths:
               type: string
             type: object
       summary: Вход пользователя
+      tags:
+      - Пользователь
+  /user/register:
+    post:
+      consumes:
+      - application/json
+      description: Регистрация нового пользователя с предоставленной информацией.
+      parameters:
+      - description: Пользовательский объект в формате JSON
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Успешно зарегистрированный пользователь
+          schema:
+            $ref: '#/definitions/model.User'
+      summary: Регистрация нового пользователя.
       tags:
       - Пользователь
   /users/{userID}:
@@ -397,4 +477,9 @@ paths:
               type: string
             type: object
       summary: Обновить данные пользователя
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

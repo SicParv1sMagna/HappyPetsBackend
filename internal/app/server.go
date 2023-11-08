@@ -12,11 +12,11 @@ import (
 )
 
 func (a *Application) StartServer() {
-	docs.SwaggerInfo.Title = "Swagger Example API"
-	docs.SwaggerInfo.Description = "This is a sample server Petstore server."
+	docs.SwaggerInfo.Title = "HappyPets RestAPI"
+	docs.SwaggerInfo.Description = "API server for Native HappyPets application"
 	docs.SwaggerInfo.Version = "1.0"
-	docs.SwaggerInfo.Host = "petstore.swagger.io"
-	docs.SwaggerInfo.BasePath = "/v2"
+	docs.SwaggerInfo.Host = "http://localhost:8080"
+	docs.SwaggerInfo.BasePath = "/"
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
 	// Создаем роутинг
@@ -51,14 +51,16 @@ func (a *Application) StartServer() {
 		}
 		pet := api.Group("pet")
 		{
-			image := pet.Group("/image") //Работа с изображениями минио хранилища
+			image := pet.Group("/image") // Работа с изображениями минио хранилища
 			{
-				image.POST("/upload/:userID/:petID", a.handler.UploadImage)   // Метод для загрузки изображения
-				image.DELETE("/remove/:userID/:petID", a.handler.RemoveImage) // Метод для удаления изображения
+				image.POST("/upload/:petID", a.handler.UploadImage)   // Метод для загрузки изображения
+				image.DELETE("/remove/:petID", a.handler.RemoveImage) // Метод для удаления изображения
 			}
-			pet.POST("/create", a.handler.CreatePet)          //Метод для создания питомца
-			pet.PUT("/update/:petID", a.handler.UpdatePet)    //Метод для изменения информации питомца
-			pet.DELETE("/delete/:petID", a.handler.DeletePet) //Метод удаления питомца
+			pet.POST("/create", a.handler.CreatePet)          // Метод для создания питомца
+			pet.PUT("/update/:petID", a.handler.UpdatePet)    // Метод для изменения информации питомца
+			pet.DELETE("/delete/:petID", a.handler.DeletePet) // Метод удаления питомца
+			pet.GET("/", a.handler.GetAllPets) 			   	  // Метод вывода всех питомцев пользователя
+			pet.GET("/:petID", a.handler.GetPetById)	  	  // Метод вывода питомца пользователя по petID
 		}
 	}
 
